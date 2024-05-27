@@ -2,7 +2,7 @@ using DefineEnums;
 using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
-    const float _stdWeoponPosX = 0.25f;
+    const float _stdWeoponPosX = 0.5f;
     const float _stdWeoponPosY = -0f;
 
     [Header("Stat Param")]
@@ -46,7 +46,7 @@ public class PlayerControl : MonoBehaviour
             //    my += 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !_isRun)//Run 제약 추가
         {
             _isAttack = true;
         }

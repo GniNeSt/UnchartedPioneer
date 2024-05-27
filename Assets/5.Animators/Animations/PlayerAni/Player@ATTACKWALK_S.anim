@@ -53,9 +53,9 @@ AnimationClip:
     script: {fileID: 0}
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: e92672d394264c35bd1961a569848a78, type: 3}
+      value: {fileID: 21300000, guid: ab266b01abe94bf1969717b408794600, type: 3}
     - time: 1
-      value: {fileID: 21300000, guid: e92672d394264c35bd1961a569848a78, type: 3}
+      value: {fileID: 21300000, guid: ab266b01abe94bf1969717b408794600, type: 3}
     attribute: m_Sprite
     path: Model/Weopon
     classID: 212
@@ -136,8 +136,8 @@ AnimationClip:
     - {fileID: 21300000, guid: ac2aee3250f64d8fb941fa6dadbed9ce, type: 3}
     - {fileID: 21300000, guid: e6c0b2ae90384d12832726c146e412bb, type: 3}
     - {fileID: 21300000, guid: a0031d47f31f44c099f7de8b898506dc, type: 3}
-    - {fileID: 21300000, guid: e92672d394264c35bd1961a569848a78, type: 3}
-    - {fileID: 21300000, guid: e92672d394264c35bd1961a569848a78, type: 3}
+    - {fileID: 21300000, guid: ab266b01abe94bf1969717b408794600, type: 3}
+    - {fileID: 21300000, guid: ab266b01abe94bf1969717b408794600, type: 3}
     - {fileID: 21300000, guid: deaed1460182458384bbd5b89d53ab92, type: 3}
     - {fileID: 21300000, guid: c35df06bb8594cd0b634f4b936536486, type: 3}
     - {fileID: 21300000, guid: f661695926fc449c8c0c0fcadc102677, type: 3}

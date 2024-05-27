@@ -53,9 +53,9 @@ AnimationClip:
     script: {fileID: 0}
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 33a61de7852d48859ccbfac1de56f9dd, type: 3}
+      value: {fileID: 21300000, guid: 20892a3374834f228ddb9df9d8d38473, type: 3}
     - time: 2
-      value: {fileID: 21300000, guid: 33a61de7852d48859ccbfac1de56f9dd, type: 3}
+      value: {fileID: 21300000, guid: 20892a3374834f228ddb9df9d8d38473, type: 3}
     attribute: m_Sprite
     path: Model/Weopon
     classID: 212
@@ -96,8 +96,8 @@ AnimationClip:
     - {fileID: 21300000, guid: b49c06667779477399d066dd4fde5f04, type: 3}
     - {fileID: 21300000, guid: 0569b04696ed4e9688300e033eceef30, type: 3}
     - {fileID: 21300000, guid: 92e60bb8763348f9a8b5528c5c910846, type: 3}
-    - {fileID: 21300000, guid: 33a61de7852d48859ccbfac1de56f9dd, type: 3}
-    - {fileID: 21300000, guid: 33a61de7852d48859ccbfac1de56f9dd, type: 3}
+    - {fileID: 21300000, guid: 20892a3374834f228ddb9df9d8d38473, type: 3}
+    - {fileID: 21300000, guid: 20892a3374834f228ddb9df9d8d38473, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
