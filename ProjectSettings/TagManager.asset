@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -12,8 +13,8 @@ TagManager:
   - Water
   - UI
   - 
-  - 
-  - 
+  - Character
+  - Projectile
   - 
   - 
   - 
@@ -43,4 +44,7 @@ TagManager:
     locked: 0
   - name: Character
     uniqueID: 305341909
+    locked: 0
+  - name: WeaponEffect
+    uniqueID: 683075051
     locked: 0

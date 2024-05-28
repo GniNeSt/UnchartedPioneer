@@ -15,12 +15,19 @@ public class PlayerControl : MonoBehaviour
     SpriteRenderer _body;
     SpriteRenderer _arm;
     SpriteRenderer _weapon;
+    Transform _rootBone;
     //정보 변수
     bool _isRun;
     bool _isAttack;
+    bool _isDead;
     float _moveSpeed = 0;
     CharActionState _currentState;
     CharDirection _currentDir;
+
+    public bool _isAttacked
+    {
+        get { return _isAttack; }
+    }
 
     void Awake()
     {
@@ -30,6 +37,8 @@ public class PlayerControl : MonoBehaviour
     }
     private void Update()
     {
+        if (_isDead) return;
+
         float mx = Input.GetAxisRaw("Horizontal");
         float my = Input.GetAxisRaw("Vertical");
 
@@ -46,7 +55,7 @@ public class PlayerControl : MonoBehaviour
             //    my += 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && !_isRun)//Run 제약 추가
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             _isAttack = true;
         }
@@ -78,6 +87,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (_isAttack)
         {
+            _moveSpeed = _walkSpeed;
             if (dirV.magnitude == 0)
                 ExchangeActionToAni(CharActionState.Attack, _currentDir);
             else if (dirV.x < 0)
@@ -153,6 +163,8 @@ public class PlayerControl : MonoBehaviour
 
     void ExchangeActionToAni(CharActionState state, CharDirection dir)
     {
+        if (_isDead) return;
+
         if (_currentState == state && _currentDir == dir) return;
 
         _aniController.SetTrigger("Changed");
@@ -175,6 +187,11 @@ public class PlayerControl : MonoBehaviour
                 break;
             case CharActionState.Run:
                 _moveSpeed = _runSpeed;
+                _weapon.gameObject.SetActive(false);
+                _arm.gameObject.SetActive(false);
+                break;
+            case CharActionState.Die:
+                _isDead = true;
                 _weapon.gameObject.SetActive(false);
                 _arm.gameObject.SetActive(false);
                 break;
@@ -209,7 +226,7 @@ public class PlayerControl : MonoBehaviour
                 break;
             case CharDirection.UP:
                 _weapon.sortingOrder = -1;
-                _weapon.transform.position = transform.position + new Vector3(0,1.5f);
+                _weapon.transform.position = transform.position + new Vector3(0, 1.5f);
                 break;
             case CharDirection.DOWN:
                 _weapon.sortingOrder = 1;
@@ -226,10 +243,16 @@ public class PlayerControl : MonoBehaviour
         _body = transform.GetChild(0).GetComponent<SpriteRenderer>();
         _weapon = transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
         _arm = transform.GetChild(0).GetChild(1).GetComponent<SpriteRenderer>();
-
+        _rootBone = transform.GetChild(1);
         _weapon.gameObject.SetActive(false);
         _arm.gameObject.SetActive(false);
     }
+
+    public Transform GetDirectionFirePos()
+    {
+        return _rootBone.GetChild((int)_currentDir);
+    }
+
     //private void OnGUI()
     //{//d,u,l,r 애니메이션
     //    if (GUI.Button(new Rect(0, 0, 120, 40), "Idle_d"))
