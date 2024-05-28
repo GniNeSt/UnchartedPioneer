@@ -222,7 +222,7 @@ public class PlayerControl : MonoBehaviour
                 break;
             case CharDirection.LEFT:
                 _weapon.sortingOrder = 1;
-                _weapon.transform.position = transform.position + new Vector3(-_stdWeoponPosX, 0.5f);
+                _weapon.transform.position = transform.position + new Vector3(-_stdWeoponPosX, 0.5f);   //강사님은 다르게 하심
                 break;
             case CharDirection.UP:
                 _weapon.sortingOrder = -1;
