@@ -185,7 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _txtMessage: {fileID: 3322406523450843982}
   _scrollObj: {fileID: 2371842302784488106}
-  _gap: 650
+  _gap: 600
   _scrollSpeed: 2
 --- !u!1 &8700311329419890113
 GameObject:
