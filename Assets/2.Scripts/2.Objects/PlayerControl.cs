@@ -37,6 +37,7 @@ public class PlayerControl : MonoBehaviour
     }
     private void Update()
     {
+        if (IngameManager._Instance._nowState != IngameState.Play) return;
         if (_isDead) return;
 
         float mx = Input.GetAxisRaw("Horizontal");

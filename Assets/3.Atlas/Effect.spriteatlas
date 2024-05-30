@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Effect
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: e27a5763582941a2a1fcc4cd2ca0d72a, type: 3}
+    - {fileID: 2800000, guid: 782da302c0394066915d94b7d7efad78, type: 3}
+    - {fileID: 2800000, guid: 1e7963c9fd1e4259a660116222732a15, type: 3}
+    - {fileID: 2800000, guid: 49fb2fc2c259409e9b4e04473b28db8b, type: 3}
+    - {fileID: 2800000, guid: ebecff27e7d8408582eb7351aa01b04f, type: 3}
+    - {fileID: 2800000, guid: a88bad05c3db426d8e9c614fa5fe0873, type: 3}
+    - {fileID: 2800000, guid: af13ecc8b1db4e758512be20b00cbf1d, type: 3}
+    - {fileID: 2800000, guid: e9385b49d08640e9b7c79504073b0775, type: 3}
+    - {fileID: 2800000, guid: ec7c80c06d1142ab99fd98e7c99b0a57, type: 3}
+    - {fileID: 2800000, guid: 0371f0d11b39442abef2f344a0388524, type: 3}
+    - {fileID: 2800000, guid: 91092dbf264a4681a595a43d29a7d58f, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: ec7c80c06d1142ab99fd98e7c99b0a57, type: 3}
+  - {fileID: 21300000, guid: 0371f0d11b39442abef2f344a0388524, type: 3}
+  - {fileID: 21300000, guid: 782da302c0394066915d94b7d7efad78, type: 3}
+  - {fileID: 21300000, guid: 49fb2fc2c259409e9b4e04473b28db8b, type: 3}
+  - {fileID: 21300000, guid: e27a5763582941a2a1fcc4cd2ca0d72a, type: 3}
+  - {fileID: 21300000, guid: a88bad05c3db426d8e9c614fa5fe0873, type: 3}
+  - {fileID: 21300000, guid: ebecff27e7d8408582eb7351aa01b04f, type: 3}
+  - {fileID: 21300000, guid: af13ecc8b1db4e758512be20b00cbf1d, type: 3}
+  - {fileID: 21300000, guid: e9385b49d08640e9b7c79504073b0775, type: 3}
+  - {fileID: 21300000, guid: 1e7963c9fd1e4259a660116222732a15, type: 3}
+  - {fileID: 21300000, guid: 91092dbf264a4681a595a43d29a7d58f, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - 09
+  - 10
+  - 02
+  - 04
+  - 01
+  - 06
+  - 05
+  - 07
+  - 08
+  - 03
+  - 11
+  m_RenderDataMap: {}
+  m_Tag: Effect
+  m_IsVariant: 0

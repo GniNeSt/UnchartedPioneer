@@ -4,7 +4,26 @@ using UnityEngine;
 
 namespace DefineEnums
 {
-    public enum CharDirection
+    #region[Manager]
+    public enum IngameState
+    {
+        Ready,
+        Start,
+        Play,
+        End,
+        Result
+    }
+    #endregion[Manager]
+
+    #region[Object]
+    public enum ExplosionType   //폭발 이펙트 종류
+    {
+        NonBreake        =0,
+        Breake,
+        Monster,
+        Unique
+    }
+    public enum CharDirection   //캐릭터 이동 방향 ->> 애니메이션
     {
         DOWN        = 0,
         UP,
@@ -22,4 +41,15 @@ namespace DefineEnums
 
         Die         = 50
     }
+
+    #endregion[Object]
+
+    #region[UI]
+    public enum MessageType
+    {
+        Standard            = 0,    //수동 close
+        Timer,                      //자동 close
+        Scroll                      //Scroll 타입은 lerp 추천
+    }
+    #endregion[UI]
 }

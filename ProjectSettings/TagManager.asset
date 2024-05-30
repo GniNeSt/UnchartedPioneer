@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bullet
+  - Wall
+  - UIMainFrame
+  - PlayerSpawnPos
   layers:
   - Default
   - TransparentFX
@@ -39,12 +42,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
+  - name: Field
+    uniqueID: 2879208589
     locked: 0
   - name: Character
     uniqueID: 305341909
     locked: 0
   - name: WeaponEffect
     uniqueID: 683075051
+    locked: 0
+  - name: Effect
+    uniqueID: 7780995
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0
