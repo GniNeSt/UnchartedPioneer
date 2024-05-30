@@ -102,4 +102,24 @@ public class IngameManager : MonoBehaviour
     {
         _crrentState = IngameState.Result;
     }
+
+    private void OnGUI()
+    {//d,u,l,r 애니메이션
+        if (GUI.Button(new Rect(0, 0, 120, 40), "Standard, 2.0f"))
+        {   //animator 구조결합 동작 추천
+            _msgTBox.OpenBox("Standard, 2.0f", MessageType.Standard, 2.0f);
+        }
+        if (GUI.Button(new Rect(0, 40, 120, 40), "Timer, 4.0f"))
+        {
+            _msgTBox.OpenBox("Timer, 4.0f", MessageType.Timer, 4.0f);
+        }
+        if (GUI.Button(new Rect(0, 80, 120, 40), "Scroll, 3.0f"))
+        {
+            _msgTBox.OpenBox("Scroll, 3.0f", MessageType.Scroll, 3.0f);
+        }
+        if (GUI.Button(new Rect(0, 120, 120, 40), "InitOption"))
+        {
+            _msgTBox.InitOption();
+        }
+    }
 }
