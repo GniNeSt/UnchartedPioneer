@@ -9,7 +9,7 @@ public class TitleMessageBox : MonoBehaviour
     [SerializeField] Transform _scrollObj;
 
     //변수
-    [SerializeField] float _gap;
+    [SerializeField] float _gap;    //이격 거리
     [SerializeField] float _scrollSpeed = 0.2f;    
     float _curTime;
     float _delayTime;
@@ -28,7 +28,7 @@ public class TitleMessageBox : MonoBehaviour
     }
     public void InitOption()
     {
-        Vector3 scrollRange = new Vector3(_gap, 0, 0);
+        Vector3 scrollRange = new Vector3(_gap, 0, 0);  //이격 거리
         _startPos = _scrollObj.position + scrollRange;   //시작
         _midPos = gameObject.transform.position;   //중간
         _endPos = _scrollObj.position - scrollRange; //도착
@@ -38,7 +38,7 @@ public class TitleMessageBox : MonoBehaviour
     {
         if (gameObject.activeSelf)//?
         {
-            if (_isScroll)
+            if (_isScroll)  //스크롤인가
             {
                 if (!_midCheck)
                 {
