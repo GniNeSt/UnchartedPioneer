@@ -38,7 +38,7 @@ namespace DefineEnums
         Run,
         Attack,
         AttackWalk,
-
+        Hit,
         Die         = 50
     }
 
