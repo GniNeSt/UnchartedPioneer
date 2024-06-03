@@ -48,7 +48,7 @@ public class LuncherControl : MonoBehaviour
         BulletControl bc = go.GetComponent<BulletControl>();
         //Vector2 dir = -pos.right;
         //Debug.Log(dir);
-        bc.Shoot();
+        bc.Shoot(_pc._finalAtt);
 
     }
     private void FlickMuzzle(Transform pos)

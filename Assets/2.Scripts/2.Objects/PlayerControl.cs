@@ -1,6 +1,6 @@
 using DefineEnums;
 using UnityEngine;
-public class PlayerControl : MonoBehaviour
+public class PlayerControl : CharacterBase
 {
     const float _stdWeoponPosX = 0.5f;
     const float _stdWeoponPosY = -0f;
@@ -19,7 +19,7 @@ public class PlayerControl : MonoBehaviour
     //정보 변수
     bool _isRun;
     bool _isAttack;
-    bool _isDead;
+
     float _moveSpeed = 0;
     CharActionState _currentState;
     CharDirection _currentDir;
@@ -29,15 +29,30 @@ public class PlayerControl : MonoBehaviour
         get { return _isAttack; }
     }
 
+    public int _finalAtt
+    {
+        get
+        {
+            return (int)(_baseAtt);
+        }
+    }
+    public int _finalDef
+    {
+        get
+        {
+            return (int)(_baseDef);
+        }
+    }
     void Awake()
     {
         //임시
-        InitSet();
+        InitSet("개척자", 10, 3, 100);
         //==
     }
     private void Update()
     {
-        if (IngameManager._Instance._nowState != IngameState.Play) return;
+
+        //if (IngameManager._Instance._nowState != IngameState.Play) return;
         if (_isDead) return;
 
         float mx = Input.GetAxisRaw("Horizontal");
@@ -237,8 +252,9 @@ public class PlayerControl : MonoBehaviour
 
 
     }
-    public void InitSet()
+    public void InitSet(string name, int att, int def, int hp)
     {
+        InitBase(name, att, def, hp);
         _moveSpeed = _walkSpeed;
         _aniController = GetComponent<Animator>();
         _body = transform.GetChild(0).GetComponent<SpriteRenderer>();
@@ -253,7 +269,16 @@ public class PlayerControl : MonoBehaviour
     {
         return _rootBone.GetChild((int)_currentDir);
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("DamageZoneMon"))
+        {            
+            MonsterControl mc = collision.transform.parent.parent.GetComponent<MonsterControl>();
+            int damage = mc._finalAtt;
 
+            Debug.LogFormat("{0}데미지를 받았습니다", damage);
+        }
+    }
     //private void OnGUI()
     //{//d,u,l,r 애니메이션
     //    if (GUI.Button(new Rect(0, 0, 120, 40), "Idle_d"))

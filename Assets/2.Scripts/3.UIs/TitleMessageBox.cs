@@ -7,7 +7,7 @@ public class TitleMessageBox : MonoBehaviour
     const float _allowable = 1.5f;  //허용오차---------
     //참조
     [SerializeField] Text _txtMessage;
-    [SerializeField] Transform _scrollObj;
+    [SerializeField] RectTransform _scrollObj;
 
     //변수
     [SerializeField] float _gap;    //이격 거리
@@ -27,6 +27,7 @@ public class TitleMessageBox : MonoBehaviour
     private void Awake()
     {
         InitOption();           //변수 초기화----------1
+        _gap += _scrollObj.rect.width/2; // /2를 붙여도 될듯?
     }
     public void InitOption()    //변수 초기화----------1
     {

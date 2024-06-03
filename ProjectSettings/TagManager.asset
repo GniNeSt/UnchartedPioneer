@@ -8,6 +8,8 @@ TagManager:
   - Wall
   - UIMainFrame
   - PlayerSpawnPos
+  - DamageZoneMon
+  - Monster
   layers:
   - Default
   - TransparentFX

@@ -6,10 +6,12 @@ public class BulletControl : MonoBehaviour
 {
     Rigidbody2D _rgbd2D;    //프리팹의 rigidbody
     [SerializeField] float force = 150f;    //사격 관련 변수                      ------1
-    public void Shoot()
+    int _finishDamage;
+    public void Shoot(int finish)
     {
         _rgbd2D = GetComponent<Rigidbody2D>();  //참조
         _rgbd2D.AddForce(-transform.right * force); //사격 rigidbody 물리 적용    ------1
+        _finishDamage = finish;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -21,6 +23,11 @@ public class BulletControl : MonoBehaviour
             ExplosionObject obj = go.GetComponent<ExplosionObject>();      //GObj
             obj.Explosion(ExplosionType.NonBreake);
             Destroy(gameObject);
+        }
+        else if (collision.CompareTag("Monster"))
+        {
+            MonsterControl mc = collision.GetComponent<MonsterControl>();
+            mc.OnHitting(_finishDamage);
         }
     }
 }

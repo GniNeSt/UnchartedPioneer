@@ -1,18 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using DefineEnums;
-public class MonsterControl : MonoBehaviour
+using UnityEngine;
+public class MonsterControl : CharacterBase
 {
     [Header("stat Parma")]
     [SerializeField] float _moveSpeed = 4f;
+    [SerializeField] float _rangeAtt = 1.5f;
     //참조 변수
     Animator _aniController;
     SpriteRenderer _model;
+    PlayerControl _target;//임시
+    Vector3 _targetDir;
+    BoxCollider2D[] _colAtts;
+
     //정보 변수
+    MonsterRank _mRank;
     CharActionState _currentState;
     CharDirection _currentDir;
-    bool _isDead;
+
+    public int _finalAtt
+    {
+        get
+        {
+            float magnifi = VariationToRank((int)_mRank);
+            return (int)(_baseAtt * magnifi);
+        }
+    }
+    public int _finalDef
+    {
+        get
+        {
+            float magnifi = VariationToRank((int)_mRank);
+            return (int)(_baseDef * magnifi);
+        }
+    }
 
     //gui용 변수
     CharActionState _guiCurrentState;
@@ -21,13 +41,106 @@ public class MonsterControl : MonoBehaviour
     private void Awake()
     {
         //임시
-        InitSet();
+        InitSet("방사능 젤리", 4, 0, 60, MonsterRank.Normal);
+    }
+    private void Update()
+    {
+        if (_isDead) return;
+        if (_target == null)
+        {
+            GameObject go = GameObject.FindGameObjectWithTag("Player");
+            if (go != null)
+                _target = go.GetComponent<PlayerControl>();
+            else
+                ExchangeActionToAni(CharActionState.Idle, _currentDir);
+        }
+        else
+        {
+            _targetDir = _target.transform.position - transform.position;
+            if (Vector3.Distance(transform.position, _target.transform.position) >= _rangeAtt)
+            {
+                //이동
+                transform.Translate(_targetDir.normalized * _moveSpeed * Time.deltaTime);
+                //상태
+                _guiCurrentState = CharActionState.Run;
+                //방향
+                //float x = 0f, y = 0f;
+                //x = _target.transform.position.x - transform.position.x;
+                //y = _target.transform.position.y - transform.position.y;
+                //애니메이터
+                ExchangeActionToAni(_guiCurrentState, getTargetDir());//---1
+            }
+            else
+            {
+                //공격
+                //상태
+                _guiCurrentState = CharActionState.Attack;
+                //방향
+                //애니메이터
+                ExchangeActionToAni(_guiCurrentState, getTargetDir());//---1
+
+            }
+        }
+    }
+    private CharDirection getTargetDir()    //방향 초기화 함수         ----1
+    {
+        if (_target == null)
+        {
+            return CharDirection.DOWN;
+        }
+        //Vector3 targetVec = _target.transform.position - transform.position;
+        float x = _targetDir.x;
+        float y = _targetDir.y;
+        CharDirection dirVertical, dirHorizontal;
+        dirHorizontal = x > 0 ? CharDirection.RIGHT : CharDirection.LEFT;
+        dirVertical = y > 0 ? CharDirection.UP : CharDirection.DOWN;
+        return Mathf.Abs(x) > Mathf.Abs(y) ? dirHorizontal : dirVertical;
+        {
+            //float verAngle = Vector3.Dot(targetVec, Vector3.up);
+            //float horAngle = Vector3.Dot(targetVec, Vector3.right);
+            //CharDirection dirVerical, dirHorizontal;
+            //if (verAngle < 0)
+            //{
+            //    dirVerical = CharDirection.DOWN;
+            //}
+            //else dirVerical = CharDirection.UP;
+            //if (horAngle < 0)
+            //{
+            //    dirHorizontal = CharDirection.LEFT;
+            //}
+            //else dirHorizontal = CharDirection.RIGHT;
+            //_currentDir = verAngle > horAngle ? dirVerical : dirHorizontal;
+        }
+        //강사님 내적 계산 코드
+        //Vector3 dir = /*(target - now).normalized;*/ Vector3.zero;
+        //Vector3 cross = Vector3.Cross(transform.forward, dir);
+        //float dot = Vector3.Dot(Vector3.down, dir);
+        //float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
+        //if (cross.y < 0)
+        //    angle *= -1;
+
+        //if (angle > -135 && angle <= -45) return CharDirection.LEFT;
+        //if (angle < 135 && angle >= 45) return CharDirection.RIGHT;
+        //if (angle > -45 && angle < 45) return CharDirection.DOWN;
+        //if (angle < -135 || angle > -45) return CharDirection.UP;
+        //return CharDirection.DOWN;
+    }
+    float VariationToRank(int rank)
+    {
+        float magnifi = 0;      //int로 바꿔야하는거 같음 -> 0으로 나오는 버그----------------
+        for (int n = 1; n <= rank; n++)
+        {
+            magnifi += n;
+        }
+        magnifi = (magnifi > 1) ? (magnifi / 2.0f) : magnifi;
+        Debug.Log(magnifi);
+        return magnifi;
     }
     void ExchangeActionToAni(CharActionState state, CharDirection dir)
     {
         if (_isDead) return;
 
-        if (_currentState == state && _currentDir == dir) return;
+        if (_currentState == state && _currentDir == dir) return; //AnyState의 경우에만 사용
 
         switch (state)
         {
@@ -69,14 +182,40 @@ public class MonsterControl : MonoBehaviour
             case CharDirection.DOWN:
                 break;
         }
-
-
     }
-    public void InitSet()
+    public void InitSet(string name, int att, int def, int hp, MonsterRank rank)
     {
+        InitBase(name, att, def, hp);
         _aniController = GetComponent<Animator>();
         _model = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        Transform tf = transform.GetChild(1);
+        _colAtts = new BoxCollider2D[tf.childCount];
+        for (int n = 0; n < tf.childCount; n++)
+        {
+            _colAtts[n] = tf.GetChild(n).GetComponent<BoxCollider2D>();
+            _colAtts[n].enabled = false;
+        }
     }
+    public void EnableAttack(int id)  //-> _currentDir 받아도 될듯? -> int id = (int)_currentDir;
+    {
+        if (_currentDir == CharDirection.RIGHT) id++;   //오른쪽
+        for (int n = 0; n < _colAtts.Length; n++)
+        {//초기화 --> 애니메이션 중간에 호출시 기존 DamageZone이 살아있는 버그
+            //if(n != id)   //없어도 될듯 -> 공격 초기화
+            _colAtts[n].enabled = false;
+        }
+        _colAtts[id].enabled = true;
+    }
+    private void DisableAttack(int id)  //-> _currentDir 받아도 될듯? -> int id = (int)_currentDir;
+    {
+        if (_currentDir == CharDirection.RIGHT) id++;   //오른쪽 
+        _colAtts[id].enabled = false;
+    }
+    public void OnHitting(int Damage)
+    {
+        Debug.LogFormat("{0}데미지를 받았습니다", Damage);
+    }
+
     private void OnGUI()
     {
         //idle
@@ -120,7 +259,7 @@ public class MonsterControl : MonoBehaviour
         {
             _guiCurrentDir = CharDirection.RIGHT;
         }
-        if (GUI.Button(new Rect(360, 120, 160, 40), _guiCurrentState.ToString()+", "+ _guiCurrentDir.ToString()))
+        if (GUI.Button(new Rect(360, 120, 160, 40), _guiCurrentState.ToString() + ", " + _guiCurrentDir.ToString()))
         {
             _isDead = false;
             ExchangeActionToAni(_guiCurrentState, _guiCurrentDir);

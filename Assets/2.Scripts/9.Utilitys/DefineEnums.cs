@@ -41,7 +41,14 @@ namespace DefineEnums
         Hit,
         Die         = 50
     }
-
+    public enum MonsterRank
+    {
+        Normal          =1,
+        Rare,
+        Elite,
+        Unique,
+        Boss
+    }
     #endregion[Object]
 
     #region[UI]
