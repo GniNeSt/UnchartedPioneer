@@ -186,6 +186,7 @@ public class MonsterControl : CharacterBase
     public void InitSet(string name, int att, int def, int hp, MonsterRank rank)
     {
         InitBase(name, att, def, hp);
+        _mRank = rank;
         _aniController = GetComponent<Animator>();
         _model = transform.GetChild(0).GetComponent<SpriteRenderer>();
         Transform tf = transform.GetChild(1);
