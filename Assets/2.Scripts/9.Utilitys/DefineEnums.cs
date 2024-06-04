@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DefineEnums
 {
+
     #region[Manager]
     public enum IngameState
     {
@@ -13,9 +14,34 @@ namespace DefineEnums
         End,
         Result
     }
+
+    public enum IngameResourceFolderName
+    {
+        Characters = 0,
+        Effects,
+        Objects,
+
+        count
+    }
+    public enum IngamePrefabName
+    {
+        PlayerObj,
+        SlimeObj,
+
+        Explosion,
+
+        BulletObj
+    }
     #endregion[Manager]
 
     #region[Object]
+    public enum MonsterKindName
+    {
+        SlimeObj,
+
+
+        BossObj
+    }
     public enum ExplosionType   //Æø¹ß ÀÌÆåÆ® Á¾·ù
     {
         NonBreake        =0,

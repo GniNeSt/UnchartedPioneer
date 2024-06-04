@@ -1,8 +1,12 @@
 using DefineEnums;  //class의 enum 사용
+using DefineUtility;
+using System.Collections.Generic;
 using UnityEngine;
 public class IngameManager : MonoBehaviour
 {
     static IngameManager _uniqueInstance;   // 인스턴스 정적 메모리 변수 (객체 참조)---1
+
+    Dictionary<string, GameObject> _prefabPool;
 
     //기본 정보 변수
     const float _readyTime = 3;
@@ -61,6 +65,8 @@ public class IngameManager : MonoBehaviour
 
         GameObject prefab = null;
         GameObject go = null;
+
+        SaveUseIngamePrefabs();
         //참조
         prefab = Resources.Load("Prefabs/UIs/TitleMessageBox") as GameObject;
         go = GameObject.FindGameObjectWithTag("UIMainFrame");//GameObject.Find("IngameMainUI");
@@ -76,6 +82,63 @@ public class IngameManager : MonoBehaviour
         _checkTime = 0;
         _msgTBox.OpenBox("레디~");
     }
+
+    void SaveUseIngamePrefabs()
+    {
+        _prefabPool = new Dictionary<string, GameObject>();
+        GameObject go = null;
+        int idNum = 0, folderCount = 0, count = 0;
+        string path = string.Empty;
+        folderCount = (int)IngameResourceFolderName.count;
+        for (int n = 0; n < folderCount; n++)
+        {
+            count = PoolUtils.GetCountIngamePrefab((IngameResourceFolderName)n);
+            for (int m = 0; m < count; m++)
+            {
+                path = "Prefabs/" + ((IngameResourceFolderName)n).ToString() + "/";
+                go = Resources.Load(path + ((IngamePrefabName)idNum).ToString()) as GameObject;
+                Debug.LogFormat("path : {0}, gameObjectName : {1}", path, go.name);
+                _prefabPool.Add(((IngamePrefabName)idNum).ToString(), go);
+                idNum++;
+            }
+            //
+            ////Effects
+            //count = (int)IngameResourceFolderName.Effects;
+            //for (int m = 0; m < count; m++)
+            //{
+            //    string path = "Prefabs/" + IngameResourceFolderName.Effects + "/";
+            //    go = Resources.Load(path + ((IngamePrefabName)idNum).ToString()) as GameObject;
+            //    _prefabPool.Add((IngamePrefabName)idNum, go);
+            //    idNum++;
+            //}
+            ////Objects
+            //count = (int)IngameResourceFolderName.Objects;
+            //for (int m = 0; m < count; m++)
+            //{
+            //    string path = "Prefabs/" + IngameResourceFolderName.Objects + "/";
+            //    go = Resources.Load(path + ((IngamePrefabName)idNum).ToString()) as GameObject;
+            //    _prefabPool.Add((IngamePrefabName)idNum, go);
+            //    idNum++;
+
+            //}
+        }
+    }
+
+    public GameObject GetPrefabFromName(IngamePrefabName name)
+    {
+        string str = name.ToString();
+        if (!_prefabPool.ContainsKey(str))
+            return null;
+        return _prefabPool[str];
+    }
+    public GameObject GetPrefabFromName(string name)
+    {
+        string str = name;
+        if (!_prefabPool.ContainsKey(str))
+            return null;
+        return _prefabPool[str];
+    }
+
     public void StateStart()
     {
         _crrentState = IngameState.Start;
@@ -83,7 +146,8 @@ public class IngameManager : MonoBehaviour
         GameObject prefab = null;
         GameObject go = null;
         //플레이어 생성
-        prefab = Resources.Load("Prefabs/Characters/PlayerObj") as GameObject;
+        //prefab = Resources.Load("Prefabs/Characters/PlayerObj") as GameObject;
+        prefab = GetPrefabFromName(IngamePrefabName.PlayerObj);
         go = Instantiate(prefab, _posSpawnPlayer, Quaternion.identity);
         _myPlayer = go.GetComponent<PlayerControl>();
 
@@ -120,6 +184,10 @@ public class IngameManager : MonoBehaviour
         if (GUI.Button(new Rect(0, 120, 120, 40), "InitOption"))
         {
             _msgTBox.InitOption();
+        }
+        if (GUI.Button(new Rect(0, 160, 120, 40), "state Play"))
+        {
+            StatePlay();
         }
     }
 }

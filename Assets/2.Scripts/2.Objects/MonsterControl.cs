@@ -5,12 +5,16 @@ public class MonsterControl : CharacterBase
     [Header("stat Parma")]
     [SerializeField] float _moveSpeed = 4f;
     [SerializeField] float _rangeAtt = 1.5f;
+    bool isAttackTime;
+
     //참조 변수
     Animator _aniController;
     SpriteRenderer _model;
     PlayerControl _target;//임시
     Vector3 _targetDir;
     BoxCollider2D[] _colAtts;
+
+
 
     //정보 변수
     MonsterRank _mRank;
@@ -45,17 +49,24 @@ public class MonsterControl : CharacterBase
     }
     private void Update()
     {
-        if (_isDead) return;
+        if (_isDead || isAttackTime) return;
         if (_target == null)
         {
             GameObject go = GameObject.FindGameObjectWithTag("Player");
             if (go != null)
+            {
                 _target = go.GetComponent<PlayerControl>();
+            }
             else
                 ExchangeActionToAni(CharActionState.Idle, _currentDir);
         }
         else
         {
+            if (_target._isDie)
+            {
+                ExchangeActionToAni(CharActionState.Idle, _currentDir);
+                return;
+            }
             _targetDir = _target.transform.position - transform.position;
             if (Vector3.Distance(transform.position, _target.transform.position) >= _rangeAtt)
             {
@@ -81,6 +92,10 @@ public class MonsterControl : CharacterBase
 
             }
         }
+    }
+    void setAttackTime()
+    {
+        isAttackTime = !isAttackTime;
     }
     private CharDirection getTargetDir()    //방향 초기화 함수         ----1
     {
@@ -206,64 +221,79 @@ public class MonsterControl : CharacterBase
             _colAtts[n].enabled = false;
         }
         _colAtts[id].enabled = true;
+
+        isAttackTime = true;
     }
     private void DisableAttack(int id)  //-> _currentDir 받아도 될듯? -> int id = (int)_currentDir;
     {
         if (_currentDir == CharDirection.RIGHT) id++;   //오른쪽 
         _colAtts[id].enabled = false;
+
+        isAttackTime = false;
     }
     public void OnHitting(int Damage)
     {
-        Debug.LogFormat("{0}데미지를 받았습니다", Damage);
+        int finishDam = Damage - _finalDef;
+        finishDam = (finishDam < 1) ? 1: finishDam;
+        _hp -= finishDam;
+        if(_hp <= 0)
+        {
+            _hp = 0;
+
+            ExchangeActionToAni(CharActionState.Die, _currentDir);
+            GetComponent<Collider2D>().enabled = false;
+            Destroy(gameObject,5);            
+        }
+
     }
 
-    private void OnGUI()
-    {
-        //idle
+    //private void OnGUI()
+    //{
+    //    //idle
 
-        float x = 120;
-        if (GUI.Button(new Rect(x, 0, 120, 40), "Idle"))
-        {
-            _guiCurrentState = CharActionState.Idle;
-        }
-        if (GUI.Button(new Rect(x, 40, 120, 40), "Run"))
-        {
-            _guiCurrentState = CharActionState.Run;
-        }
-        if (GUI.Button(new Rect(x, 80, 120, 40), "Hit"))
-        {
-            _guiCurrentState = CharActionState.Hit;
-        }
-        if (GUI.Button(new Rect(x, 120, 120, 40), "Attack"))
-        {
-            _guiCurrentState = CharActionState.Attack;
-        }
-        if (GUI.Button(new Rect(x, 160, 120, 40), "Die"))
-        {
-            _guiCurrentState = CharActionState.Die;
-        }
-        //방향
-        x = 240;
-        if (GUI.Button(new Rect(x, 0, 120, 40), "Down"))
-        {
-            _guiCurrentDir = CharDirection.DOWN;
-        }
-        if (GUI.Button(new Rect(x, 40, 120, 40), "Up"))
-        {
-            _guiCurrentDir = CharDirection.UP;
-        }
-        if (GUI.Button(new Rect(x, 80, 120, 40), "Left"))
-        {
-            _guiCurrentDir = CharDirection.LEFT;
-        }
-        if (GUI.Button(new Rect(x, 120, 120, 40), "Right"))
-        {
-            _guiCurrentDir = CharDirection.RIGHT;
-        }
-        if (GUI.Button(new Rect(360, 120, 160, 40), _guiCurrentState.ToString() + ", " + _guiCurrentDir.ToString()))
-        {
-            _isDead = false;
-            ExchangeActionToAni(_guiCurrentState, _guiCurrentDir);
-        }
-    }
+    //    float x = 120;
+    //    if (GUI.Button(new Rect(x, 0, 120, 40), "Idle"))
+    //    {
+    //        _guiCurrentState = CharActionState.Idle;
+    //    }
+    //    if (GUI.Button(new Rect(x, 40, 120, 40), "Run"))
+    //    {
+    //        _guiCurrentState = CharActionState.Run;
+    //    }
+    //    if (GUI.Button(new Rect(x, 80, 120, 40), "Hit"))
+    //    {
+    //        _guiCurrentState = CharActionState.Hit;
+    //    }
+    //    if (GUI.Button(new Rect(x, 120, 120, 40), "Attack"))
+    //    {
+    //        _guiCurrentState = CharActionState.Attack;
+    //    }
+    //    if (GUI.Button(new Rect(x, 160, 120, 40), "Die"))
+    //    {
+    //        _guiCurrentState = CharActionState.Die;
+    //    }
+    //    //방향
+    //    x = 240;
+    //    if (GUI.Button(new Rect(x, 0, 120, 40), "Down"))
+    //    {
+    //        _guiCurrentDir = CharDirection.DOWN;
+    //    }
+    //    if (GUI.Button(new Rect(x, 40, 120, 40), "Up"))
+    //    {
+    //        _guiCurrentDir = CharDirection.UP;
+    //    }
+    //    if (GUI.Button(new Rect(x, 80, 120, 40), "Left"))
+    //    {
+    //        _guiCurrentDir = CharDirection.LEFT;
+    //    }
+    //    if (GUI.Button(new Rect(x, 120, 120, 40), "Right"))
+    //    {
+    //        _guiCurrentDir = CharDirection.RIGHT;
+    //    }
+    //    if (GUI.Button(new Rect(360, 120, 160, 40), _guiCurrentState.ToString() + ", " + _guiCurrentDir.ToString()))
+    //    {
+    //        _isDead = false;
+    //        ExchangeActionToAni(_guiCurrentState, _guiCurrentDir);
+    //    }
+    //}
 }

@@ -1,11 +1,10 @@
 using UnityEngine;
-
+using DefineEnums;
 public class LuncherControl : MonoBehaviour
 {
     PlayerControl _pc;
     GameObject _prefabBullet;
     [SerializeField] GameObject _MuzzleFlash;
-
 
     [SerializeField] float _delayShoot = 0.2f;
     [SerializeField] float _MuzzleShowTime = 0.1f;
@@ -14,10 +13,13 @@ public class LuncherControl : MonoBehaviour
     private void Awake()
     {
         _pc = GetComponent<PlayerControl>();
-        _prefabBullet = Resources.Load("Prefabs/Objects/BulletObj") as GameObject;
+        //_prefabBullet = Resources.Load("Prefabs/Objects/BulletObj") as GameObject;
+        _prefabBullet = IngameManager._Instance.GetPrefabFromName(IngamePrefabName.BulletObj);
+
     }
     private void Update()
-    {   
+    {
+        if (_pc._isDie) return; //0604 Ãß°¡
         if (_pc._isAttacked)
         {
             if (Time.time - _curTime >= _delayShoot)

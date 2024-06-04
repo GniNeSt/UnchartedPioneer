@@ -10,6 +10,7 @@ public class PlayerControl : CharacterBase
     [SerializeField] float _runSpeed = 3f;
     [SerializeField] SpriteRenderer _spriteRenderer;
 
+
     //참조 변수
     Animator _aniController;
     SpriteRenderer _body;
@@ -43,6 +44,7 @@ public class PlayerControl : CharacterBase
             return (int)(_baseDef);
         }
     }
+    public bool _isDie { get { return _isDead; } }
     void Awake()
     {
         //임시
@@ -272,11 +274,31 @@ public class PlayerControl : CharacterBase
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("DamageZoneMon"))
-        {            
+        {
             MonsterControl mc = collision.transform.parent.parent.GetComponent<MonsterControl>();
             int damage = mc._finalAtt;
 
-            Debug.LogFormat("{0}데미지를 받았습니다", damage);
+            int finishDam = damage - _finalDef;
+            finishDam = (finishDam < 1) ? 1 : finishDam;
+            _hp -= finishDam;
+            if (_hp <= 0)
+            {
+                _hp = 0;
+                ExchangeActionToAni(CharActionState.Die, _currentDir);
+
+                GetComponent<Collider2D>().enabled = false;
+                Destroy(gameObject, 5);
+            }
+
+
+            Debug.LogFormat("{0}데미지를 받았습니다." + gameObject.name + " 남은 체력 : {1}", damage, _hp);
+        }
+    }
+    private void OnGUI()
+    {//d,u,l,r 애니메이션
+        if (GUI.Button(new Rect(400, 0, 120, 40), "setPlayerDie"))
+        {
+            InitSet("", 2, 0, 1);
         }
     }
     //private void OnGUI()
