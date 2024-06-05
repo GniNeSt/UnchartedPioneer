@@ -14,6 +14,7 @@ public class SpawnFactory : MonoBehaviour
 
     [SerializeField]public List<GameObject> _generateObjs;
     GameObject _prefabSpawnObject;
+    PlayerControl _target;
     PlayerControl _pc;
     
     [SerializeField]float _checkTime;
@@ -24,21 +25,22 @@ public class SpawnFactory : MonoBehaviour
         get; set;
     }
 
-    public void InitData()
+    public void InitData(PlayerControl target)
     {
         GameObject go = GameObject.FindGameObjectWithTag("Player");
         _pc = go.GetComponent<PlayerControl>();
         _prefabSpawnObject = IngameManager._Instance.GetPrefabFromName(_spawnMon.ToString());
         _generateObjs = new List<GameObject>();
         _isStart = true;
+        _target = target;
     }
     private void Update()
     {
-        if(IngameManager._Instance._nowState == IngameState.Play && !_doOnce)
-        {
-            _doOnce = true;
-            InitData();
-        }
+        //if(IngameManager._Instance._nowState == IngameState.Play && !_doOnce)
+        //{
+        //    _doOnce = true;
+        //    InitData();
+        //}
         if (_pc == null) return;
         else if (_pc._isDie) return;
 
@@ -54,20 +56,97 @@ public class SpawnFactory : MonoBehaviour
             if(_checkTime >= _generateDelayTime)//생성 주기
             {
                 _checkTime = 0;
-                for (int i = 0; i < _genPerCount; i++)//주기당 생성 개수
+
+                int gapX = 0, gapY = 0, distance = 1;
+                int x = _genPerCount / 4;
+                for (int i = 1; i <= x; i++)
                 {
-                    //다중 생성 위치 차이 추가
-                    GameObject go = Instantiate(_prefabSpawnObject, transform.position, Quaternion.identity);
-                    _generateObjs.Add(go);
-                    
-                    _genCount++;
-                    if (_generateObjs.Count >= _limitLiveCount)break;//한계 생존 개수
+                    for (int j = 0; j < 4; j++)
+                    {
+                        if (_generateObjs.Count >= _limitLiveCount) break;
+                        switch (j)
+                        {
+                            case (int)CharDirection.DOWN:
+                                gapX = 0; gapY = -distance;
+                                break;
+                            case (int)CharDirection.UP:
+                                gapX = 0; gapY = distance;
+                                break;
+                            case (int)CharDirection.LEFT:
+                                gapX = -distance; gapY = 0;
+                                break;
+                            case (int)CharDirection.RIGHT:
+                                gapX = distance; gapY = 0;
+                                break;
+                        }
+
+                        Vector3 pos = transform.position + new Vector3(gapX, gapY, 0);
+                        GameObject go = Instantiate(_prefabSpawnObject, pos, Quaternion.identity);
+
+                        ///
+                        MonsterControl mc = go.GetComponent<MonsterControl>();
+                        mc.InitSet("방사능 젤리", 4, 0, 6, MonsterRank.Normal, _target);
+                        //mc.InitSet
+
+                        _generateObjs.Add(go);
+
+                        _genCount++;
+                        _checkTime = 0;
+                    }
+                    distance += 1;
                 }
+                //마지막 사이클의 나머지
+                for (int j = 0; j < _genPerCount % 4; j++)
+                {
+                    if (_generateObjs.Count >= _limitLiveCount) break;
+                    switch (j)
+                    {
+                        case (int)CharDirection.DOWN:
+                            gapX = 0; gapY = -distance;
+                            break;
+                        case (int)CharDirection.UP:
+                            gapX = 0; gapY = distance;
+                            break;
+                        case (int)CharDirection.LEFT:
+                            gapX = -distance; gapY = 0;
+                            break;
+                        case (int)CharDirection.RIGHT:
+                            gapX = distance; gapY = 0;
+                            break;
+                    }
+
+                    Vector3 pos = transform.position + new Vector3(gapX, gapY, 0);
+                    GameObject go = Instantiate(_prefabSpawnObject, pos, Quaternion.identity);
+
+
+                    ///
+                    MonsterControl mc = go.GetComponent<MonsterControl>();
+                    mc.InitSet("방사능 젤리", 4, 0, 60, MonsterRank.Normal, _target);
+                    //mc.InitSet
+
+                    _generateObjs.Add(go);
+
+                    _genCount++;
+                    _checkTime = 0;
+                }
+
+
+
+                //for (int i = 0; i < _genPerCount; i++)//주기당 생성 개수
+                //{
+                //    //다중 생성 위치 차이 추가
+                //    GameObject go = Instantiate(_prefabSpawnObject, transform.position, Quaternion.identity);
+                //    _generateObjs.Add(go);
+
+                //    _genCount++;
+                //    if (_generateObjs.Count >= _limitLiveCount)break;//한계 생존 개수
+                //}
             }
         }
     }
     private void LateUpdate()
     {
+        if (!_isStart) return;
         foreach (GameObject go in _generateObjs)
         {//list null 제거
             if (go == null)

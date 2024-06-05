@@ -48,7 +48,7 @@ public class PlayerControl : CharacterBase
     void Awake()
     {
         //ÀÓ½Ã
-        InitSet("°³Ã´ÀÚ", 10, 3, 100);
+        //InitSet("°³Ã´ÀÚ", 10, 3, 100);
         //==
     }
     private void Update()

@@ -13,7 +13,7 @@ GameObject:
   m_Layer: 0
   m_Name: FactoryObj
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -44,3 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec1133743608ae42a31112c59915e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spawnMon: 0
+  _generateDelayTime: 5
+  _genPerCount: 1
+  _maximumGenCount: 10
+  _limitLiveCount: 3
+  _generateObjs: []
+  _checkTime: 0
+  _genCount: 0

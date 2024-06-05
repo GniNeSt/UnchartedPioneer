@@ -45,7 +45,7 @@ public class MonsterControl : CharacterBase
     private void Awake()
     {
         //임시
-        InitSet("방사능 젤리", 4, 0, 60, MonsterRank.Normal);
+        //InitSet("방사능 젤리", 4, 0, 60, MonsterRank.Normal);
     }
     private void Update()
     {
@@ -198,7 +198,7 @@ public class MonsterControl : CharacterBase
                 break;
         }
     }
-    public void InitSet(string name, int att, int def, int hp, MonsterRank rank)
+    public void InitSet(string name, int att, int def, int hp, MonsterRank rank, PlayerControl target)
     {
         InitBase(name, att, def, hp);
         _mRank = rank;
@@ -211,6 +211,8 @@ public class MonsterControl : CharacterBase
             _colAtts[n] = tf.GetChild(n).GetComponent<BoxCollider2D>();
             _colAtts[n].enabled = false;
         }
+
+        _target = target;
     }
     public void EnableAttack(int id)  //-> _currentDir 받아도 될듯? -> int id = (int)_currentDir;
     {

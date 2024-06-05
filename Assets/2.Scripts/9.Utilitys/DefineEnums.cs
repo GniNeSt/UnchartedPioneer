@@ -32,6 +32,14 @@ namespace DefineEnums
 
         BulletObj
     }
+
+    public enum UIWndName
+    {
+        TitleMessageBox,
+        InfoMessageBox,
+
+        max
+    }
     #endregion[Manager]
 
     #region[Object]
@@ -82,7 +90,9 @@ namespace DefineEnums
     {
         Standard            = 0,    //수동 close
         Timer,                      //자동 close
-        Scroll                      //Scroll 타입은 lerp 추천
+        Scroll,                      //Scroll 타입은 lerp 추천
+        Blink           = Scroll,
+        Fade
     }
     #endregion[UI]
 }

@@ -8,6 +8,8 @@ public class IngameManager : MonoBehaviour
 
     Dictionary<string, GameObject> _prefabPool;
 
+    Dictionary<UIWndName, GameObject> _prefabUIWnd;
+
     //기본 정보 변수
     const float _readyTime = 3;
 
@@ -19,12 +21,20 @@ public class IngameManager : MonoBehaviour
     //정보 변수
     IngameState _crrentState;       //DefineEnums에서 enum-상태
     float _checkTime;
-
-    //임시 변수
-    TitleMessageBox _msgTBox;
     PlayerControl _myPlayer;
+    FollowCamera _myCam;
+
+    //UI
+    TitleMessageBox _msgTBox;
+    [SerializeField]InfoMessageBox _msgInfoBox;
+
+
     //===
 
+    //test
+    [SerializeField] float _guiTime;
+    MessageType _guiType;
+    Color _guiColor;
     public IngameState _nowState    //프로퍼티 current State 참조
     {
         get { return _crrentState; }
@@ -37,6 +47,7 @@ public class IngameManager : MonoBehaviour
     private void Awake()
     {
         _uniqueInstance = this;     //객체 잠조 Singleton                           ---1
+        _guiColor = Color.white;
     }
     private void Start()
     {
@@ -58,6 +69,19 @@ public class IngameManager : MonoBehaviour
                 break;
         }
     }
+    void InituiPrefabs()
+    {
+        _prefabUIWnd = new Dictionary<UIWndName, GameObject>();
+
+        int count = (int)UIWndName.max;
+        string path = "Prefabs/UIs/";
+        for(int n =0; n < count; n++)
+        {
+            UIWndName name = (UIWndName)n;
+            GameObject prefab = Resources.Load(path + name.ToString()) as GameObject;
+            _prefabUIWnd.Add(name, prefab);
+        }
+    }
 
     public void StateReady()
     {
@@ -67,8 +91,12 @@ public class IngameManager : MonoBehaviour
         GameObject go = null;
 
         SaveUseIngamePrefabs();
+        InituiPrefabs();
+
         //참조
-        prefab = Resources.Load("Prefabs/UIs/TitleMessageBox") as GameObject;
+        _myCam = Camera.main.GetComponent<FollowCamera>();
+
+        prefab = _prefabUIWnd[UIWndName.TitleMessageBox];
         go = GameObject.FindGameObjectWithTag("UIMainFrame");//GameObject.Find("IngameMainUI");
         _uiMainFrameRoot = go.transform;
         go = GameObject.FindGameObjectWithTag("PlayerSpawnPos");
@@ -76,6 +104,9 @@ public class IngameManager : MonoBehaviour
         go = Instantiate(prefab, _uiMainFrameRoot);
 
         _msgTBox = go.GetComponent<TitleMessageBox>();
+
+        prefab = _prefabUIWnd[(UIWndName)UIWndName.InfoMessageBox];
+
 
 
         //초기화
@@ -150,9 +181,11 @@ public class IngameManager : MonoBehaviour
         prefab = GetPrefabFromName(IngamePrefabName.PlayerObj);
         go = Instantiate(prefab, _posSpawnPlayer, Quaternion.identity);
         _myPlayer = go.GetComponent<PlayerControl>();
+        _myPlayer.InitSet("개척자", 1, 3, 100);
 
         _checkTime = 0;
         _msgTBox.OpenBox("스타트~");
+        _myCam.StartFollow(_myPlayer.transform);
     }
     public void StatePlay()
     {
@@ -165,6 +198,24 @@ public class IngameManager : MonoBehaviour
     public void StateResult()
     {
         _crrentState = IngameState.Result;
+    }
+
+    //UI용
+    public void OpenInfoMsgBox(string msg, Color color = new Color(),
+        MessageType type = MessageType.Standard, float delay = 2.0f)
+    {
+        if(_msgInfoBox == null)
+        {
+            GameObject prefab = _prefabUIWnd[UIWndName.InfoMessageBox];
+            GameObject go = Instantiate(prefab, _uiMainFrameRoot);
+            _msgInfoBox = go.GetComponent<InfoMessageBox>();
+        }
+        _msgInfoBox.OpenBox(msg, color, type, delay);
+    }
+    public void CloseInfoMsgBox()
+    {
+        if(_msgInfoBox != null)
+            _msgInfoBox.CloseBox();
     }
 
     private void OnGUI()
@@ -188,6 +239,41 @@ public class IngameManager : MonoBehaviour
         if (GUI.Button(new Rect(0, 160, 120, 40), "state Play"))
         {
             StatePlay();
+        }
+
+
+
+        if (GUI.Button(new Rect(160, 0, 120, 40), "Standard"))
+        {
+            _guiType = MessageType.Standard;
+        }
+        if (GUI.Button(new Rect(160, 40, 120, 40), "Timer"))
+        {
+            _guiType = MessageType.Timer;
+        }
+        if (GUI.Button(new Rect(160, 80, 120, 40), "Blink"))
+        {
+            _guiType = MessageType.Blink;
+        }
+        if (GUI.Button(new Rect(160, 120, 120, 40), "Fade"))
+        {
+            _guiType = MessageType.Fade;
+        }
+        if (GUI.Button(new Rect(160, 160, 120, 40), "ColorChange"))
+        {
+            Color c1 = Color.black;
+            Color c2 = Color.cyan;
+            if (_guiColor == c1) _guiColor = c2;
+            else _guiColor = c1;
+
+        }
+        if (GUI.Button(new Rect(280, 0, 120, 40), "openBox"))
+        {
+            _msgInfoBox.OpenBox("Text Mesage" + _guiType.ToString(), _guiColor, _guiType, _guiTime);
+        }
+        if (GUI.Button(new Rect(280, 40, 120, 40), "closeBox"))
+        {
+            _msgInfoBox.CloseBox();
         }
     }
 }
