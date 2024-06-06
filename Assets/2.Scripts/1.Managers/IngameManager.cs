@@ -181,7 +181,7 @@ public class IngameManager : MonoBehaviour
         prefab = GetPrefabFromName(IngamePrefabName.PlayerObj);
         go = Instantiate(prefab, _posSpawnPlayer, Quaternion.identity);
         _myPlayer = go.GetComponent<PlayerControl>();
-        _myPlayer.InitSet("°³Ã´ÀÚ", 1, 3, 100);
+        _myPlayer.InitSet("°³Ã´ÀÚ", 4, 3, 100);
 
         _checkTime = 0;
         _msgTBox.OpenBox("½ºÅ¸Æ®~");

@@ -294,13 +294,7 @@ public class PlayerControl : CharacterBase
             Debug.LogFormat("{0}데미지를 받았습니다." + gameObject.name + " 남은 체력 : {1}", damage, _hp);
         }
     }
-    private void OnGUI()
-    {//d,u,l,r 애니메이션
-        if (GUI.Button(new Rect(400, 0, 120, 40), "setPlayerDie"))
-        {
-            InitSet("", 2, 0, 1);
-        }
-    }
+   
     //private void OnGUI()
     //{//d,u,l,r 애니메이션
     //    if (GUI.Button(new Rect(0, 0, 120, 40), "Idle_d"))

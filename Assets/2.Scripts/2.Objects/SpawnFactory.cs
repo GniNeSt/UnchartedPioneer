@@ -121,7 +121,7 @@ public class SpawnFactory : MonoBehaviour
 
                     ///
                     MonsterControl mc = go.GetComponent<MonsterControl>();
-                    mc.InitSet("规荤瓷 俩府", 4, 0, 60, MonsterRank.Normal, _target);
+                    mc.InitSet("规荤瓷 俩府", 4, 0, 6, MonsterRank.Normal, _target);
                     //mc.InitSet
 
                     _generateObjs.Add(go);
