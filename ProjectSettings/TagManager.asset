@@ -10,6 +10,7 @@ TagManager:
   - PlayerSpawnPos
   - DamageZoneMon
   - Monster
+  - CameraPosition
   layers:
   - Default
   - TransparentFX

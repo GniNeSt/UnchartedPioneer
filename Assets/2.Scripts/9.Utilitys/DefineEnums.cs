@@ -11,6 +11,7 @@ namespace DefineEnums
         Ready,
         Start,
         Play,
+        PlayWait,
         End,
         Result
     }
@@ -40,6 +41,12 @@ namespace DefineEnums
 
         max
     }
+
+    public enum ClearType
+    {
+        KillCount,
+        Survive
+    }
     #endregion[Manager]
 
     #region[Object]
@@ -48,7 +55,11 @@ namespace DefineEnums
         SlimeObj,
 
 
-        BossObj
+        BossObj,
+
+
+
+        Count
     }
     public enum ExplosionType   //Æø¹ß ÀÌÆåÆ® Á¾·ù
     {

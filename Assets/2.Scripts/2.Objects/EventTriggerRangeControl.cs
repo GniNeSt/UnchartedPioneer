@@ -9,13 +9,31 @@ public class EventTriggerRangeControl : MonoBehaviour
 
     CircleCollider2D _collider2D;
     bool _isWarning;
-
+    public void ResetFactory()
+    {
+        foreach (SpawnFactory sf in _factorys)
+        {
+            //팩토리를 멈춘다.
+            sf._isStart = false;
+            //몬스터를 모두 지운다.
+            sf.DeleteEnemy();
+            //팩토리 리스토어를 진행.
+            sf.Restore();
+        }
+    }
     private void Awake()
     {
         _collider2D = GetComponent<CircleCollider2D>();
         _collider2D.radius = _radius;
         _isWarning = false;
+        _collider2D.enabled = false;
     }
+    public void CheckStart()
+    {
+        _isWarning = true;
+        _collider2D.enabled = true;
+    }
+
     private void Update()
     {
         if (_isWarning)

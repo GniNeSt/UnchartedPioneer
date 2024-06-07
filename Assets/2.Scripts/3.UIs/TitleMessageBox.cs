@@ -2,6 +2,8 @@ using DefineEnums;
 using UnityEngine;
 using UnityEngine.UI;
 
+//좌하단 characte,r 상단 모드 및 시간, 우상단 몬스터 종류에 따른 처치 수
+
 public class TitleMessageBox : MonoBehaviour
 {
     const float _allowable = 1.5f;  //허용오차---------
@@ -103,6 +105,7 @@ public class TitleMessageBox : MonoBehaviour
         _curTime = 0;
         curType = MessageType.Standard;
         //---------------------------------
+
     }
 
     private void OnGUI()    //디버그용

@@ -1,5 +1,6 @@
 using DefineEnums;
 using UnityEngine;
+
 public class MonsterControl : CharacterBase
 {
     [Header("stat Parma")]
@@ -37,7 +38,10 @@ public class MonsterControl : CharacterBase
             return (int)(_baseDef * magnifi);
         }
     }
-
+    public MonsterRank _getRank
+    {
+        get { return _mRank; }
+    }
     //gui¿ë º¯¼ö
     CharActionState _guiCurrentState;
     CharDirection _guiCurrentDir;
@@ -241,14 +245,18 @@ public class MonsterControl : CharacterBase
         if(_hp <= 0)
         {
             _hp = 0;
-
-            ExchangeActionToAni(CharActionState.Die, _currentDir);
-            GetComponent<Collider2D>().enabled = false;
-            Destroy(gameObject,5);            
+            IngameManager._Instance.AddKillCounting();
+            PhaseEnd();
         }
 
     }
+    public void PhaseEnd()
+    {
 
+        ExchangeActionToAni(CharActionState.Die, _currentDir);
+        GetComponent<Collider2D>().enabled = false;
+        Destroy(gameObject, 5);
+    }
     //private void OnGUI()
     //{
     //    //idle

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DefineEnums;
-
+using DefineUtility;
 public class SpawnFactory : MonoBehaviour
 {
     [Header("생성 파파미터")]
@@ -19,12 +19,37 @@ public class SpawnFactory : MonoBehaviour
     
     [SerializeField]float _checkTime;
     [SerializeField] int _genCount;
-    bool _doOnce;
+
+    float totalPrice;
     public bool _isStart
     {
         get; set;
     }
-
+    public void Restore()
+    {
+        _generateObjs.Clear();
+        _genCount = 0;
+        _checkTime = 0;
+    }
+    public void DeleteEnemy()
+    {
+        foreach(var obj in _generateObjs)
+        {
+            obj.GetComponent<MonsterControl>().PhaseEnd();  //die
+        }
+    }
+    //추가 스크립트
+    private void RandomizeSpawnMon()
+    {
+        totalPrice = 0;
+        for (int i = 0; i < (int)MonsterKindName.Count; i++)    //사용하는 몬스터 종류의 수를 받아오기
+        {
+            GameObject go = IngameManager._Instance.GetPrefabFromName(((MonsterKindName)i).ToString());
+            MonsterRank mr = go.GetComponent<MonsterControl>()._getRank;
+            totalPrice += RarePrice.GetPriceOfMonPrefab(mr);
+        }
+    }
+    //
     public void InitData(PlayerControl target)
     {
         GameObject go = GameObject.FindGameObjectWithTag("Player");

@@ -11,22 +11,29 @@ public class IngameManager : MonoBehaviour
     Dictionary<UIWndName, GameObject> _prefabUIWnd;
 
     //기본 정보 변수
-    const float _readyTime = 3;
+    const float _readyTime = 3, _endTime = 3f;
 
 
     //참조 변수
     Transform _uiMainFrameRoot;
+    Transform _camPos;
     Vector3 _posSpawnPlayer;
 
     //정보 변수
+    List<ClearConditionInfo> _endConditions;
+    EventTriggerRangeControl[] _etRangeControls;
     IngameState _crrentState;       //DefineEnums에서 enum-상태
     float _checkTime;
     PlayerControl _myPlayer;
     FollowCamera _myCam;
+    ClearConditionInfo _nowCondition;
+    [SerializeField]int _conditionIndex;
+    bool _isClear;
+
 
     //UI
     TitleMessageBox _msgTBox;
-    [SerializeField]InfoMessageBox _msgInfoBox;
+    [SerializeField] InfoMessageBox _msgInfoBox;
 
 
     //===
@@ -67,22 +74,64 @@ public class IngameManager : MonoBehaviour
                     StateStart();
                 }
                 break;
+            case IngameState.Play:
+                if (_myPlayer._isDie)
+                {
+                    //게임오버
+                    StateEnd(true);
+                }
+                else if (CheckClearCondition())
+                {
+                    //게임 클리어
+                    StateEnd(false);
+                }
+                break;
+            case IngameState.End:
+                _checkTime += Time.deltaTime;
+                if (_checkTime > _endTime)
+                {
+                    StateResult();
+                }
+                break;
         }
     }
-    void InituiPrefabs()
+    void InitUiPrefabs()
     {
         _prefabUIWnd = new Dictionary<UIWndName, GameObject>();
 
         int count = (int)UIWndName.max;
         string path = "Prefabs/UIs/";
-        for(int n =0; n < count; n++)
+        for (int n = 0; n < count; n++)
         {
             UIWndName name = (UIWndName)n;
             GameObject prefab = Resources.Load(path + name.ToString()) as GameObject;
             _prefabUIWnd.Add(name, prefab);
         }
     }
+    bool CheckClearCondition()
+    {
+        bool isClear = false;
+        switch (_nowCondition._Type)
+        {
+            
+            case ClearType.KillCount:
+                if(_nowCondition._endCount <= 0)
+                {
+                    //_sectionIndex 에 대한 연산 필요
+                    _conditionIndex++;///////////
+                    if(_conditionIndex >= _endConditions.Count)
+                        isClear = true;
+                    else
+                    {
+                        _nowCondition = _endConditions[_conditionIndex];
+                    }
+                }
+                break;
 
+        }
+
+        return isClear;
+    }
     public void StateReady()
     {
         _crrentState = IngameState.Ready;
@@ -91,16 +140,20 @@ public class IngameManager : MonoBehaviour
         GameObject go = null;
 
         SaveUseIngamePrefabs();
-        InituiPrefabs();
+        InitUiPrefabs();
 
         //참조
         _myCam = Camera.main.GetComponent<FollowCamera>();
 
-        prefab = _prefabUIWnd[UIWndName.TitleMessageBox];
         go = GameObject.FindGameObjectWithTag("UIMainFrame");//GameObject.Find("IngameMainUI");
         _uiMainFrameRoot = go.transform;
         go = GameObject.FindGameObjectWithTag("PlayerSpawnPos");
         _posSpawnPlayer = go.transform.position;
+        go = GameObject.FindGameObjectWithTag("CameraPosition");
+        _camPos = go.transform;
+        _etRangeControls = GameObject.FindObjectsOfType<EventTriggerRangeControl>();
+        //UI
+        prefab = _prefabUIWnd[UIWndName.TitleMessageBox];
         go = Instantiate(prefab, _uiMainFrameRoot);
 
         _msgTBox = go.GetComponent<TitleMessageBox>();
@@ -111,7 +164,14 @@ public class IngameManager : MonoBehaviour
 
         //초기화
         _checkTime = 0;
+        _isClear = false;
+        _conditionIndex = 0;/////////////////////////
+        _myCam.InitPosCam(_camPos.position);
         _msgTBox.OpenBox("레디~");
+
+
+        //임시
+        SettingEndConditions();
     }
 
     void SaveUseIngamePrefabs()
@@ -169,10 +229,16 @@ public class IngameManager : MonoBehaviour
             return null;
         return _prefabPool[str];
     }
-
+    public void SettingEndConditions()
+    {
+        _endConditions = new List<ClearConditionInfo>();
+        ClearConditionInfo info = new ClearConditionInfo(ClearType.KillCount, 10, -1);
+        _endConditions.Add(info);
+    }
     public void StateStart()
     {
         _crrentState = IngameState.Start;
+
 
         GameObject prefab = null;
         GameObject go = null;
@@ -186,25 +252,64 @@ public class IngameManager : MonoBehaviour
         _checkTime = 0;
         _msgTBox.OpenBox("스타트~");
         _myCam.StartFollow(_myPlayer.transform);
+        foreach (EventTriggerRangeControl ctrl in _etRangeControls)
+        {
+            ctrl.CheckStart();
+        }
+
+        //임시
+        _nowCondition = _endConditions[_conditionIndex];
     }
     public void StatePlay()
     {
         _crrentState = IngameState.Play;
+
+        _msgTBox.CloseBox();
     }
-    public void StateEnd()
+    public void StateEnd(bool dead)
     {
         _crrentState = IngameState.End;
+        _isClear = !dead;
+        _checkTime = 0;
+        if (_isClear)
+        {
+            _msgTBox.OpenBox("Congratulations!!!", MessageType.Timer, 3);
+        }
+        else
+        {
+            _msgTBox.OpenBox("You Bad", MessageType.Timer, 3);
+        }
+
+
+
+        foreach(EventTriggerRangeControl ctrl in _etRangeControls)
+        {   //factory 정지
+            ctrl.ResetFactory();
+        }
+
+
     }
     public void StateResult()
     {
         _crrentState = IngameState.Result;
     }
 
+    public void AddKillCounting()
+    {
+        if (_nowCondition._Type == ClearType.KillCount)
+            _nowCondition._endCount--;
+        else
+        {
+            _nowCondition._endCount++;
+        }
+        Debug.LogFormat("endCount : {0}",_nowCondition._endCount);
+    }
+
     //UI용
     public void OpenInfoMsgBox(string msg, Color color = new Color(),
         MessageType type = MessageType.Standard, float delay = 2.0f)
     {
-        if(_msgInfoBox == null)
+        if (_msgInfoBox == null)
         {
             GameObject prefab = _prefabUIWnd[UIWndName.InfoMessageBox];
             GameObject go = Instantiate(prefab, _uiMainFrameRoot);
@@ -214,7 +319,7 @@ public class IngameManager : MonoBehaviour
     }
     public void CloseInfoMsgBox()
     {
-        if(_msgInfoBox != null)
+        if (_msgInfoBox != null)
             _msgInfoBox.CloseBox();
     }
 
