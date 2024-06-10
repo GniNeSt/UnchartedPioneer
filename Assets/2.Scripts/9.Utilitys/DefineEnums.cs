@@ -38,6 +38,7 @@ namespace DefineEnums
     {
         TitleMessageBox,
         InfoMessageBox,
+        MiniStatusBox,
 
         max
     }

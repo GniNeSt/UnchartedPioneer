@@ -1,5 +1,6 @@
 using DefineEnums;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MonsterControl : CharacterBase
 {
@@ -22,6 +23,11 @@ public class MonsterControl : CharacterBase
     CharActionState _currentState;
     CharDirection _currentDir;
 
+    //UI참조
+    const float _VisibleTime = 2.0f;
+    float _lastTime;
+    Text _txtName;
+    Slider _hpBar;
     public int _finalAtt
     {
         get
@@ -95,6 +101,14 @@ public class MonsterControl : CharacterBase
                 ExchangeActionToAni(_guiCurrentState, getTargetDir());//---1
 
             }
+        }
+    }
+    private void LateUpdate()
+    {
+        _lastTime += Time.deltaTime;
+        if(_lastTime >= _VisibleTime)
+        {
+            CloseStatusBox();
         }
     }
     void setAttackTime()
@@ -202,6 +216,16 @@ public class MonsterControl : CharacterBase
                 break;
         }
     }
+    void OpenStatusBox()
+    {
+        _txtName.gameObject.SetActive(true);
+        _hpBar.gameObject.SetActive(true);
+    }
+    void CloseStatusBox()
+    {
+        _txtName.gameObject.SetActive(false);
+        _hpBar.gameObject.SetActive(false);
+    }
     public void InitSet(string name, int att, int def, int hp, MonsterRank rank, PlayerControl target)
     {
         InitBase(name, att, def, hp);
@@ -217,6 +241,14 @@ public class MonsterControl : CharacterBase
         }
 
         _target = target;
+        _txtName = GetComponentInChildren<Text>();
+        _hpBar = GetComponentInChildren<Slider>();
+
+
+
+        _hpBar.value = _hpRate;
+        _txtName.text = _myName;
+        CloseStatusBox();
     }
     public void EnableAttack(int id)  //-> _currentDir 받아도 될듯? -> int id = (int)_currentDir;
     {
@@ -247,8 +279,14 @@ public class MonsterControl : CharacterBase
             _hp = 0;
             IngameManager._Instance.AddKillCounting();
             PhaseEnd();
+            _lastTime = 1f;
         }
-
+        else
+        {
+            OpenStatusBox();
+            _lastTime = 0;
+        }
+        _hpBar.value = _hpRate;
     }
     public void PhaseEnd()
     {

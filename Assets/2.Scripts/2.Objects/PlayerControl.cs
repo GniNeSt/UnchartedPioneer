@@ -17,6 +17,9 @@ public class PlayerControl : CharacterBase
     SpriteRenderer _arm;
     SpriteRenderer _weapon;
     Transform _rootBone;
+
+    MiniStatusBox _statusBox;
+
     //정보 변수
     bool _isRun;
     bool _isAttack;
@@ -254,9 +257,11 @@ public class PlayerControl : CharacterBase
 
 
     }
-    public void InitSet(string name, int att, int def, int hp)
+    public void InitSet(string name, int att, int def, int hp, MiniStatusBox miniStatusBox)
     {
         InitBase(name, att, def, hp);
+        _statusBox = miniStatusBox;
+        _statusBox.InitStauts(name, att, def, _hpRate);
         _moveSpeed = _walkSpeed;
         _aniController = GetComponent<Animator>();
         _body = transform.GetChild(0).GetComponent<SpriteRenderer>();
@@ -289,7 +294,7 @@ public class PlayerControl : CharacterBase
                 GetComponent<Collider2D>().enabled = false;
                 Destroy(gameObject, 5);
             }
-
+            _statusBox.SetHpBar(_hpRate);
 
             Debug.LogFormat("{0}데미지를 받았습니다." + gameObject.name + " 남은 체력 : {1}", damage, _hp);
         }

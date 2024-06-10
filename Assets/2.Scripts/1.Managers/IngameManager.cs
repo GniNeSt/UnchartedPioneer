@@ -34,6 +34,7 @@ public class IngameManager : MonoBehaviour
     //UI
     TitleMessageBox _msgTBox;
     [SerializeField] InfoMessageBox _msgInfoBox;
+    MiniStatusBox _miniStatusBox;
 
 
     //===
@@ -158,8 +159,13 @@ public class IngameManager : MonoBehaviour
 
         _msgTBox = go.GetComponent<TitleMessageBox>();
 
-        prefab = _prefabUIWnd[(UIWndName)UIWndName.InfoMessageBox];
-
+        //prefab = _prefabUIWnd[(UIWndName)UIWndName.InfoMessageBox];
+        
+        
+        //Player MiniStatusBox//////////////////////////////////////////////
+        prefab = _prefabUIWnd[UIWndName.MiniStatusBox];
+        go = Instantiate(prefab, _uiMainFrameRoot);
+        _miniStatusBox = go.GetComponent <MiniStatusBox>();
 
 
         //초기화
@@ -247,7 +253,7 @@ public class IngameManager : MonoBehaviour
         prefab = GetPrefabFromName(IngamePrefabName.PlayerObj);
         go = Instantiate(prefab, _posSpawnPlayer, Quaternion.identity);
         _myPlayer = go.GetComponent<PlayerControl>();
-        _myPlayer.InitSet("개척자", 4, 3, 100);
+        _myPlayer.InitSet("개척자", 4, 3, 100, _miniStatusBox);
 
         _checkTime = 0;
         _msgTBox.OpenBox("스타트~");
@@ -264,6 +270,8 @@ public class IngameManager : MonoBehaviour
     {
         _crrentState = IngameState.Play;
 
+        _miniStatusBox.gameObject.SetActive(true);
+
         _msgTBox.CloseBox();
     }
     public void StateEnd(bool dead)
@@ -271,6 +279,9 @@ public class IngameManager : MonoBehaviour
         _crrentState = IngameState.End;
         _isClear = !dead;
         _checkTime = 0;
+        
+        _miniStatusBox.gameObject.SetActive(false);
+
         if (_isClear)
         {
             _msgTBox.OpenBox("Congratulations!!!", MessageType.Timer, 3);
@@ -323,62 +334,62 @@ public class IngameManager : MonoBehaviour
             _msgInfoBox.CloseBox();
     }
 
-    private void OnGUI()
-    {//d,u,l,r 애니메이션
-        if (GUI.Button(new Rect(0, 0, 120, 40), "Standard, 2.0f"))
-        {   //animator 구조결합 동작 추천
-            _msgTBox.OpenBox("Standard, 2.0f", MessageType.Standard, 2.0f);
-        }
-        if (GUI.Button(new Rect(0, 40, 120, 40), "Timer, 4.0f"))
-        {
-            _msgTBox.OpenBox("Timer, 4.0f", MessageType.Timer, 4.0f);
-        }
-        if (GUI.Button(new Rect(0, 80, 120, 40), "Scroll, 3.0f"))
-        {
-            _msgTBox.OpenBox("Scroll, 3.0f", MessageType.Scroll, 3.0f);
-        }
-        if (GUI.Button(new Rect(0, 120, 120, 40), "InitOption"))
-        {
-            _msgTBox.InitOption();
-        }
-        if (GUI.Button(new Rect(0, 160, 120, 40), "state Play"))
-        {
-            StatePlay();
-        }
+    //private void OnGUI()
+    //{//d,u,l,r 애니메이션
+    //    if (GUI.Button(new Rect(0, 0, 120, 40), "Standard, 2.0f"))
+    //    {   //animator 구조결합 동작 추천
+    //        _msgTBox.OpenBox("Standard, 2.0f", MessageType.Standard, 2.0f);
+    //    }
+    //    if (GUI.Button(new Rect(0, 40, 120, 40), "Timer, 4.0f"))
+    //    {
+    //        _msgTBox.OpenBox("Timer, 4.0f", MessageType.Timer, 4.0f);
+    //    }
+    //    if (GUI.Button(new Rect(0, 80, 120, 40), "Scroll, 3.0f"))
+    //    {
+    //        _msgTBox.OpenBox("Scroll, 3.0f", MessageType.Scroll, 3.0f);
+    //    }
+    //    if (GUI.Button(new Rect(0, 120, 120, 40), "InitOption"))
+    //    {
+    //        _msgTBox.InitOption();
+    //    }
+    //    if (GUI.Button(new Rect(0, 160, 120, 40), "state Play"))
+    //    {
+    //        StatePlay();
+    //    }
 
 
 
-        if (GUI.Button(new Rect(160, 0, 120, 40), "Standard"))
-        {
-            _guiType = MessageType.Standard;
-        }
-        if (GUI.Button(new Rect(160, 40, 120, 40), "Timer"))
-        {
-            _guiType = MessageType.Timer;
-        }
-        if (GUI.Button(new Rect(160, 80, 120, 40), "Blink"))
-        {
-            _guiType = MessageType.Blink;
-        }
-        if (GUI.Button(new Rect(160, 120, 120, 40), "Fade"))
-        {
-            _guiType = MessageType.Fade;
-        }
-        if (GUI.Button(new Rect(160, 160, 120, 40), "ColorChange"))
-        {
-            Color c1 = Color.black;
-            Color c2 = Color.cyan;
-            if (_guiColor == c1) _guiColor = c2;
-            else _guiColor = c1;
+    //    if (GUI.Button(new Rect(160, 0, 120, 40), "Standard"))
+    //    {
+    //        _guiType = MessageType.Standard;
+    //    }
+    //    if (GUI.Button(new Rect(160, 40, 120, 40), "Timer"))
+    //    {
+    //        _guiType = MessageType.Timer;
+    //    }
+    //    if (GUI.Button(new Rect(160, 80, 120, 40), "Blink"))
+    //    {
+    //        _guiType = MessageType.Blink;
+    //    }
+    //    if (GUI.Button(new Rect(160, 120, 120, 40), "Fade"))
+    //    {
+    //        _guiType = MessageType.Fade;
+    //    }
+    //    if (GUI.Button(new Rect(160, 160, 120, 40), "ColorChange"))
+    //    {
+    //        Color c1 = Color.black;
+    //        Color c2 = Color.cyan;
+    //        if (_guiColor == c1) _guiColor = c2;
+    //        else _guiColor = c1;
 
-        }
-        if (GUI.Button(new Rect(280, 0, 120, 40), "openBox"))
-        {
-            _msgInfoBox.OpenBox("Text Mesage" + _guiType.ToString(), _guiColor, _guiType, _guiTime);
-        }
-        if (GUI.Button(new Rect(280, 40, 120, 40), "closeBox"))
-        {
-            _msgInfoBox.CloseBox();
-        }
-    }
+    //    }
+    //    if (GUI.Button(new Rect(280, 0, 120, 40), "openBox"))
+    //    {
+    //        _msgInfoBox.OpenBox("Text Mesage" + _guiType.ToString(), _guiColor, _guiType, _guiTime);
+    //    }
+    //    if (GUI.Button(new Rect(280, 40, 120, 40), "closeBox"))
+    //    {
+    //        _msgInfoBox.CloseBox();
+    //    }
+    //}
 }
