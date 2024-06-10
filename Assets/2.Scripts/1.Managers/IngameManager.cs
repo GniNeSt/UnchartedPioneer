@@ -33,6 +33,7 @@ public class IngameManager : MonoBehaviour
 
     //UI
     TitleMessageBox _msgTBox;
+    TimeUI _timeBox;
     [SerializeField] InfoMessageBox _msgInfoBox;
     MiniStatusBox _miniStatusBox;
 
@@ -158,15 +159,21 @@ public class IngameManager : MonoBehaviour
         go = Instantiate(prefab, _uiMainFrameRoot);
 
         _msgTBox = go.GetComponent<TitleMessageBox>();
+        
+        
 
         //prefab = _prefabUIWnd[(UIWndName)UIWndName.InfoMessageBox];
-        
-        
+
+
         //Player MiniStatusBox//////////////////////////////////////////////
         prefab = _prefabUIWnd[UIWndName.MiniStatusBox];
         go = Instantiate(prefab, _uiMainFrameRoot);
-        _miniStatusBox = go.GetComponent <MiniStatusBox>();
+        _miniStatusBox = go.GetComponent<MiniStatusBox>();
 
+        prefab = _prefabUIWnd[UIWndName.TimeBox];
+        go = Instantiate(prefab, _uiMainFrameRoot);
+
+        _timeBox = go.GetComponent<TimeUI>();
 
         //초기화
         _checkTime = 0;
@@ -271,7 +278,8 @@ public class IngameManager : MonoBehaviour
         _crrentState = IngameState.Play;
 
         _miniStatusBox.gameObject.SetActive(true);
-
+        _timeBox.gameObject.SetActive(true);
+        _timeBox.InitTime(105, ClearType.Survive);
         _msgTBox.CloseBox();
     }
     public void StateEnd(bool dead)
@@ -291,9 +299,9 @@ public class IngameManager : MonoBehaviour
             _msgTBox.OpenBox("You Bad", MessageType.Timer, 3);
         }
 
+        _timeBox.GameSet(ClearType.end);
 
-
-        foreach(EventTriggerRangeControl ctrl in _etRangeControls)
+        foreach (EventTriggerRangeControl ctrl in _etRangeControls)
         {   //factory 정지
             ctrl.ResetFactory();
         }

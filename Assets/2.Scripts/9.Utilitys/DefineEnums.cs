@@ -39,6 +39,7 @@ namespace DefineEnums
         TitleMessageBox,
         InfoMessageBox,
         MiniStatusBox,
+        TimeBox,
 
         max
     }
@@ -46,7 +47,9 @@ namespace DefineEnums
     public enum ClearType
     {
         KillCount,
-        Survive
+        Survive,
+
+        end
     }
     #endregion[Manager]
 
