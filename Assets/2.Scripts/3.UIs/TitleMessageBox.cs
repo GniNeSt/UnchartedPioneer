@@ -2,7 +2,7 @@ using DefineEnums;
 using UnityEngine;
 using UnityEngine.UI;
 
-//좌하단 characte,r 상단 모드 및 시간, 우상단 몬스터 종류에 따른 처치 수
+//좌하단 character, 상단 모드 시간(시계 이미지 + 초 : 백분 초 + 파란색은 증가, 빨간색은 감소), 우상단 몬스터 종류에 따른 처치 수
 
 public class TitleMessageBox : MonoBehaviour
 {
