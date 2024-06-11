@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 6592568828012652535}
   - component: {fileID: 6592568828012652532}
   m_Layer: 0
-  m_Name: BossObj
+  m_Name: ModifyAlienObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

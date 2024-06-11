@@ -40,6 +40,8 @@ namespace DefineEnums
         InfoMessageBox,
         MiniStatusBox,
         TimeBox,
+        KillLogBox,
+        CountingPanel,
 
         max
     }
@@ -57,9 +59,9 @@ namespace DefineEnums
     public enum MonsterKindName
     {
         SlimeObj,
+        WeakBatObj,
 
-
-        BossObj,
+        ModifyAlienObj,
 
 
 

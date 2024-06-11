@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class MonsterControl : CharacterBase
 {
     [Header("stat Parma")]
+    [SerializeField] MonsterKindName _myKindName;
     [SerializeField] float _moveSpeed = 4f;
     [SerializeField] float _rangeAtt = 1.5f;
     bool isAttackTime;
@@ -277,7 +278,7 @@ public class MonsterControl : CharacterBase
         if(_hp <= 0)
         {
             _hp = 0;
-            IngameManager._Instance.AddKillCounting();
+            IngameManager._Instance.AddKillCounting(_myKindName);
             PhaseEnd();
             _lastTime = 1f;
         }

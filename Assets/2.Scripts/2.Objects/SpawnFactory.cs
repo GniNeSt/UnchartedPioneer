@@ -25,6 +25,11 @@ public class SpawnFactory : MonoBehaviour
     {
         get; set;
     }
+
+    public MonsterKindName _generateMonsterKind
+    {
+        get { return _spawnMon; }
+    }
     public void Restore()
     {
         _generateObjs.Clear();

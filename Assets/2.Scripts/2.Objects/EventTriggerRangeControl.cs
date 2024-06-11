@@ -21,6 +21,16 @@ public class EventTriggerRangeControl : MonoBehaviour
             sf.Restore();
         }
     }
+    public MonsterKindName[] GetGenMonKinds()
+    {
+        List<MonsterKindName>kinds = new List<MonsterKindName>(); 
+        for(int i = 0; i < _factorys.Length; i++)
+        {
+            if(!kinds.Contains(_factorys[i]._generateMonsterKind))
+                kinds.Add(_factorys[i]._generateMonsterKind);
+        }
+        return kinds.ToArray();
+    }
     private void Awake()
     {
         _collider2D = GetComponent<CircleCollider2D>();

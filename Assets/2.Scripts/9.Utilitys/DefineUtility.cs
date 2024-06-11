@@ -4,9 +4,11 @@ using UnityEngine;
 using DefineEnums;
 namespace DefineUtility
 {
+
     public struct ClearConditionInfo
     {
         public ClearType _Type;
+
         public int _endCount;
         public float _limitTime;
 

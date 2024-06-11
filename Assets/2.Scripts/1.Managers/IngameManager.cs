@@ -20,6 +20,7 @@ public class IngameManager : MonoBehaviour
     Vector3 _posSpawnPlayer;
 
     //정보 변수
+    Dictionary<MonsterKindName, int> _ltMonsterKind;
     List<ClearConditionInfo> _endConditions;
     EventTriggerRangeControl[] _etRangeControls;
     IngameState _crrentState;       //DefineEnums에서 enum-상태
@@ -27,16 +28,17 @@ public class IngameManager : MonoBehaviour
     PlayerControl _myPlayer;
     FollowCamera _myCam;
     ClearConditionInfo _nowCondition;
-    [SerializeField]int _conditionIndex;
+    [SerializeField] int _conditionIndex;
     bool _isClear;
 
 
     //UI
     TitleMessageBox _msgTBox;
     TimeUI _timeBox;
+    KillLogBox _killLogBox;
     [SerializeField] InfoMessageBox _msgInfoBox;
     MiniStatusBox _miniStatusBox;
-
+    CountingPanel _countingPanel;
 
     //===
 
@@ -77,16 +79,35 @@ public class IngameManager : MonoBehaviour
                 }
                 break;
             case IngameState.Play:
-                if (_myPlayer._isDie)
+                if(_nowCondition._Type == ClearType.Survive)
                 {
-                    //게임오버
-                    StateEnd(true);
+                    _checkTime -= Time.deltaTime;
+                    _timeBox.SetTimer(_checkTime);
+                    if (_myPlayer._isDie)
+                        StateEnd(true);
+                    else if (CheckClearCondition())
+                        StateEnd(false);
                 }
-                else if (CheckClearCondition())
+                else
                 {
-                    //게임 클리어
-                    StateEnd(false);
+                    _checkTime += Time.deltaTime;
+                    _timeBox.SetTimer(_checkTime);
+                    if (_myPlayer._isDie)
+                        StateEnd(true);
+                    else if (CheckClearCondition())
+                        StateEnd(false);
                 }
+                ////_nowCondition._type ==survive 또는 ~~~ --> 시간 체크 --> timerBox time.text 초기화
+                //if (_myPlayer._isDie)
+                //{
+                //    //게임오버
+                //    StateEnd(true);
+                //}
+                //else if (CheckClearCondition())
+                //{
+                //    //게임 클리어
+                //    StateEnd(false);
+                //}
                 break;
             case IngameState.End:
                 _checkTime += Time.deltaTime;
@@ -113,24 +134,51 @@ public class IngameManager : MonoBehaviour
     bool CheckClearCondition()
     {
         bool isClear = false;
+        //임시
+
+        //
         switch (_nowCondition._Type)
         {
-            
             case ClearType.KillCount:
-                if(_nowCondition._endCount <= 0)
-                {
-                    //_sectionIndex 에 대한 연산 필요
-                    _conditionIndex++;///////////
-                    if(_conditionIndex >= _endConditions.Count)
-                        isClear = true;
-                    else
-                    {
-                        _nowCondition = _endConditions[_conditionIndex];
-                    }
-                }
+                if (_nowCondition._endCount == 0)
+                    _conditionIndex++;
                 break;
-
+            case ClearType.Survive:
+                if (_checkTime <= 0)
+                    _conditionIndex++;
+                break;
+            //case ClearType.KillCount:
+            //    if (_nowCondition._endCount <= 0)
+            //    {
+            //        //_sectionIndex 에 대한 연산 필요
+            //        _conditionIndex++;///////////
+            //        if (_conditionIndex >= _endConditions.Count)
+            //            isClear = true;
+            //        else
+            //        {
+            //            _nowCondition = _endConditions[_conditionIndex];
+            //        }
+            //    }
+            //    break;
+            //case ClearType.Survive:
+            //    if (_checkTime <= 0)
+            //    {
+            //        _conditionIndex++;//TimerBox의 시간 관리를 다 처리
+            //        ///////////////UIManager가 있다면 상속으로 open close isOpend 관리
+            //        ///
+            //        if (_conditionIndex >= _endConditions.Count)
+            //            isClear = true;
+            //        else
+            //        {
+            //            _nowCondition = _endConditions[_conditionIndex];
+            //        }
+            //    }
+            //    break;
         }
+        if (_conditionIndex >= _endConditions.Count)
+            isClear = true;
+        else
+            _nowCondition = _endConditions[_conditionIndex];
 
         return isClear;
     }
@@ -141,8 +189,11 @@ public class IngameManager : MonoBehaviour
         GameObject prefab = null;
         GameObject go = null;
 
+        _ltMonsterKind = new Dictionary<MonsterKindName, int>();
+
         SaveUseIngamePrefabs();
         InitUiPrefabs();
+
 
         //참조
         _myCam = Camera.main.GetComponent<FollowCamera>();
@@ -159,8 +210,8 @@ public class IngameManager : MonoBehaviour
         go = Instantiate(prefab, _uiMainFrameRoot);
 
         _msgTBox = go.GetComponent<TitleMessageBox>();
-        
-        
+
+
 
         //prefab = _prefabUIWnd[(UIWndName)UIWndName.InfoMessageBox];
 
@@ -169,11 +220,19 @@ public class IngameManager : MonoBehaviour
         prefab = _prefabUIWnd[UIWndName.MiniStatusBox];
         go = Instantiate(prefab, _uiMainFrameRoot);
         _miniStatusBox = go.GetComponent<MiniStatusBox>();
-
+        //TimeBox///////////////////////////
         prefab = _prefabUIWnd[UIWndName.TimeBox];
         go = Instantiate(prefab, _uiMainFrameRoot);
 
         _timeBox = go.GetComponent<TimeUI>();
+        //킬로그 생성
+        prefab = _prefabUIWnd[UIWndName.KillLogBox];
+        go = Instantiate(prefab, _uiMainFrameRoot);
+
+        _killLogBox = go.GetComponent<KillLogBox>();
+
+        prefab = _prefabUIWnd[UIWndName.CountingPanel];
+        _countingPanel = prefab.GetComponent<CountingPanel>();
 
         //초기화
         _checkTime = 0;
@@ -181,6 +240,21 @@ public class IngameManager : MonoBehaviour
         _conditionIndex = 0;/////////////////////////
         _myCam.InitPosCam(_camPos.position);
         _msgTBox.OpenBox("레디~");
+
+        for (int n = 0; n < _etRangeControls.Length; n++)
+        {
+            MonsterKindName[] kinds = _etRangeControls[n].GetGenMonKinds();
+            for (int i = 0; i < kinds.Length; i++)
+            {
+                if (!_ltMonsterKind.ContainsKey(kinds[i]))
+                    _ltMonsterKind.Add(kinds[i], 0);
+            }
+        }
+        //임시
+        _ltMonsterKind.Add(MonsterKindName.WeakBatObj, 1);
+        _ltMonsterKind.Add(MonsterKindName.ModifyAlienObj, 2);
+        //킬로그 박스 설정
+        _killLogBox.OpenBox(_ltMonsterKind, _countingPanel);
 
 
         //임시
@@ -264,6 +338,19 @@ public class IngameManager : MonoBehaviour
 
         _checkTime = 0;
         _msgTBox.OpenBox("스타트~");
+        //강사님은 여기에 timerBox 나오게 하셨음.
+        //if(_nowCondition._Type == ClearType.Survive)
+        //{
+        //    _checkTime = _nowCondition._limitTime;
+        //    _timeBox.OpenBox(_checkTime, true);
+        //}
+        //else
+        //{
+        //    _checkTime = 0;
+        //    _timeBox.OpenBox();
+        //}
+
+
         _myCam.StartFollow(_myPlayer.transform);
         foreach (EventTriggerRangeControl ctrl in _etRangeControls)
         {
@@ -279,7 +366,7 @@ public class IngameManager : MonoBehaviour
 
         _miniStatusBox.gameObject.SetActive(true);
         _timeBox.gameObject.SetActive(true);
-        _timeBox.InitTime(105, ClearType.Survive);
+        _timeBox.InitTime(105, _nowCondition._Type);////////////////
         _msgTBox.CloseBox();
     }
     public void StateEnd(bool dead)
@@ -287,7 +374,7 @@ public class IngameManager : MonoBehaviour
         _crrentState = IngameState.End;
         _isClear = !dead;
         _checkTime = 0;
-        
+
         _miniStatusBox.gameObject.SetActive(false);
 
         if (_isClear)
@@ -313,15 +400,17 @@ public class IngameManager : MonoBehaviour
         _crrentState = IngameState.Result;
     }
 
-    public void AddKillCounting()
+    public void AddKillCounting(MonsterKindName kind)
     {
+        _ltMonsterKind[kind]++;
         if (_nowCondition._Type == ClearType.KillCount)
             _nowCondition._endCount--;
         else
         {
             _nowCondition._endCount++;
         }
-        Debug.LogFormat("endCount : {0}",_nowCondition._endCount);
+        Debug.LogFormat("endCount : {0}", _nowCondition._endCount);///////////////////????????????
+        _killLogBox.SetKillCount(kind, _ltMonsterKind[kind]);
     }
 
     //UI용
