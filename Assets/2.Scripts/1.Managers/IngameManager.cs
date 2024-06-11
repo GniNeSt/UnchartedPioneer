@@ -135,7 +135,7 @@ public class IngameManager : MonoBehaviour
     {
         bool isClear = false;
         //임시
-
+        
         //
         switch (_nowCondition._Type)
         {
@@ -177,8 +177,8 @@ public class IngameManager : MonoBehaviour
         }
         if (_conditionIndex >= _endConditions.Count)
             isClear = true;
-        else
-            _nowCondition = _endConditions[_conditionIndex];
+        //else
+        //    _nowCondition = _endConditions[_conditionIndex];  //오류있음 캐릭터 꼐쏙 초기화하 됨
 
         return isClear;
     }
@@ -403,11 +403,16 @@ public class IngameManager : MonoBehaviour
     public void AddKillCounting(MonsterKindName kind)
     {
         _ltMonsterKind[kind]++;
+        Debug.LogFormat("endCount2 : {0}", _nowCondition._endCount);///////////////////????????????
         if (_nowCondition._Type == ClearType.KillCount)
+        {
             _nowCondition._endCount--;
+            Debug.LogFormat("endCount0 : {0}", _nowCondition._endCount);///////////////////????????????
+        }
         else
         {
             _nowCondition._endCount++;
+            Debug.LogFormat("endCount1 : {0}", _nowCondition._endCount);///////////////////????????????
         }
         Debug.LogFormat("endCount : {0}", _nowCondition._endCount);///////////////////????????????
         _killLogBox.SetKillCount(kind, _ltMonsterKind[kind]);
