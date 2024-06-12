@@ -25,6 +25,7 @@ public class IngameManager : MonoBehaviour
     EventTriggerRangeControl[] _etRangeControls;
     IngameState _crrentState;       //DefineEnums에서 enum-상태
     float _checkTime;
+    float _playTime;
     PlayerControl _myPlayer;
     FollowCamera _myCam;
     ClearConditionInfo _nowCondition;
@@ -81,8 +82,8 @@ public class IngameManager : MonoBehaviour
             case IngameState.Play:
                 if(_nowCondition._Type == ClearType.Survive)
                 {
-                    _checkTime -= Time.deltaTime;
-                    _timeBox.SetTimer(_checkTime);
+                    _playTime -= Time.deltaTime;
+                    _timeBox.SetTimer(_playTime);
                     if (_myPlayer._isDie)
                         StateEnd(true);
                     else if (CheckClearCondition())
@@ -90,8 +91,8 @@ public class IngameManager : MonoBehaviour
                 }
                 else
                 {
-                    _checkTime += Time.deltaTime;
-                    _timeBox.SetTimer(_checkTime);
+                    _playTime += Time.deltaTime;
+                    _timeBox.SetTimer(_playTime);
                     if (_myPlayer._isDie)
                         StateEnd(true);
                     else if (CheckClearCondition())
@@ -144,7 +145,7 @@ public class IngameManager : MonoBehaviour
                     _conditionIndex++;
                 break;
             case ClearType.Survive:
-                if (_checkTime <= 0)
+                if (_playTime <= 0)
                     _conditionIndex++;
                 break;
             //case ClearType.KillCount:
@@ -251,8 +252,8 @@ public class IngameManager : MonoBehaviour
             }
         }
         //임시
-        _ltMonsterKind.Add(MonsterKindName.WeakBatObj, 1);
-        _ltMonsterKind.Add(MonsterKindName.ModifyAlienObj, 2);
+        //_ltMonsterKind.Add(MonsterKindName.WeakBatObj, 0);
+        _ltMonsterKind.Add(MonsterKindName.ModifyAlienObj, 0);
         //킬로그 박스 설정
         _killLogBox.OpenBox(_ltMonsterKind, _countingPanel);
 
@@ -398,6 +399,12 @@ public class IngameManager : MonoBehaviour
     public void StateResult()
     {
         _crrentState = IngameState.Result;
+
+        GameObject go = Instantiate(_prefabUIWnd[UIWndName.ResultWindow]);
+        ResultWnd wnd = go.GetComponent<ResultWnd>();
+        go = _prefabUIWnd[UIWndName.CountInfoBox];
+
+        wnd.OpenWnd(_isClear, go, _ltMonsterKind, _playTime);
     }
 
     public void AddKillCounting(MonsterKindName kind)

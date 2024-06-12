@@ -387,7 +387,7 @@ MonoBehaviour:
     width: 0
     height: 0
   _centerTf: {fileID: 543563632}
-  _clapmRange: {x: 26.93, y: 15.9}
+  _clapmRange: {x: 146.3, y: 112.3}
   _clampMaxPoint: {x: 0, y: 0}
   _clampMinPoint: {x: 0, y: 0}
 --- !u!1 &543563631

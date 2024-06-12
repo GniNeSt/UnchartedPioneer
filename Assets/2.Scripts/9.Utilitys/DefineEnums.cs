@@ -42,6 +42,8 @@ namespace DefineEnums
         TimeBox,
         KillLogBox,
         CountingPanel,
+        CountInfoBox,
+        ResultWindow,
 
         max
     }
