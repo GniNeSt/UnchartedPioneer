@@ -37,6 +37,7 @@ public class IngameManager : MonoBehaviour
     TitleMessageBox _msgTBox;
     TimeUI _timeBox;
     KillLogBox _killLogBox;
+    VirtualInputPad _virtualInputPad;//play
     [SerializeField] InfoMessageBox _msgInfoBox;
     MiniStatusBox _miniStatusBox;
     CountingPanel _countingPanel;
@@ -235,6 +236,12 @@ public class IngameManager : MonoBehaviour
         prefab = _prefabUIWnd[UIWndName.CountingPanel];
         _countingPanel = prefab.GetComponent<CountingPanel>();
 
+
+        go = Instantiate(_prefabUIWnd[UIWndName.VirtualPadBox],_uiMainFrameRoot);
+        _virtualInputPad = go.GetComponent<VirtualInputPad>();
+        _virtualInputPad.gameObject.SetActive(false);
+
+
         //초기화
         _checkTime = 0;
         _isClear = false;
@@ -326,8 +333,7 @@ public class IngameManager : MonoBehaviour
     public void StateStart()
     {
         _crrentState = IngameState.Start;
-
-
+        _virtualInputPad.InitSet();
         GameObject prefab = null;
         GameObject go = null;
         //플레이어 생성
@@ -335,7 +341,7 @@ public class IngameManager : MonoBehaviour
         prefab = GetPrefabFromName(IngamePrefabName.PlayerObj);
         go = Instantiate(prefab, _posSpawnPlayer, Quaternion.identity);
         _myPlayer = go.GetComponent<PlayerControl>();
-        _myPlayer.InitSet("개척자", 4, 3, 100, _miniStatusBox);
+        _myPlayer.InitSet("개척자", 4, 3, 100, _miniStatusBox, _virtualInputPad);
 
         _checkTime = 0;
         _msgTBox.OpenBox("스타트~");
@@ -369,6 +375,10 @@ public class IngameManager : MonoBehaviour
         _timeBox.gameObject.SetActive(true);
         _timeBox.InitTime(105, _nowCondition._Type);////////////////
         _msgTBox.CloseBox();
+
+
+        GameObject go = _prefabUIWnd[UIWndName.VirtualPadBox];
+        _virtualInputPad = go.GetComponent<VirtualInputPad>();
     }
     public void StateEnd(bool dead)
     {

@@ -20,6 +20,7 @@ public class PlayerControl : CharacterBase
 
     MiniStatusBox _statusBox;
 
+    VirtualInputPad _virtualInputPad;
     //정보 변수
     bool _isRun;
     bool _isAttack;
@@ -60,9 +61,11 @@ public class PlayerControl : CharacterBase
         //if (IngameManager._Instance._nowState != IngameState.Play) return;
         if (_isDead) return;
 
-        float mx = Input.GetAxisRaw("Horizontal");
-        float my = Input.GetAxisRaw("Vertical");
-
+        //float mx = Input.GetAxisRaw("Horizontal");
+        //float my = Input.GetAxisRaw("Vertical");
+        float mx = _virtualInputPad._horizValue;
+        float my = _virtualInputPad._vertValue;
+        Debug.LogFormat("{0},{1}", mx, my);
         {
             //float mx = 0;
             //float my = 0;
@@ -76,24 +79,26 @@ public class PlayerControl : CharacterBase
             //    my += 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _isAttack = true;
-        }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            _isAttack = false;
-        }
+        _isAttack = _virtualInputPad._attack;
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    _isAttack = true;
+        //}
+        //if (Input.GetKeyUp(KeyCode.Space))
+        //{
+        //    _isAttack = false;
+        //}
         if (!_isAttack)
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
-                _isRun = true;
-            }
-            if (Input.GetKeyUp(KeyCode.LeftShift))
-            {
-                _isRun = false;
-            }
+            _isRun = _virtualInputPad._running;
+            //if (Input.GetKeyDown(KeyCode.LeftShift))
+            //{
+            //    _isRun = true;
+            //}
+            //if (Input.GetKeyUp(KeyCode.LeftShift))
+            //{
+            //    _isRun = false;
+            //}
         }
 
 
@@ -257,9 +262,10 @@ public class PlayerControl : CharacterBase
 
 
     }
-    public void InitSet(string name, int att, int def, int hp, MiniStatusBox miniStatusBox)
+    public void InitSet(string name, int att, int def, int hp, MiniStatusBox miniStatusBox, VirtualInputPad virtualInput)
     {
         InitBase(name, att, def, hp);
+        _virtualInputPad = virtualInput;
         _statusBox = miniStatusBox;
         _statusBox.InitStauts(name, att, def, _hpRate);
         _moveSpeed = _walkSpeed;

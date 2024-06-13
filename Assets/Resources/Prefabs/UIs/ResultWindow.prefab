@@ -1302,7 +1302,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 5
     m_MaxSize: 60
-    m_Alignment: 0
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 1
@@ -2507,7 +2507,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da85fa8a36b59440b62258a0569c7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _iconMons:
+  - {fileID: 21300000, guid: 0c3a3ade04aa91a4c8df7d25c6c21569, type: 3}
+  - {fileID: 21300000, guid: d928758da16829640aab8ccf8da3d2ed, type: 3}
+  - {fileID: 21300000, guid: 7afd3d09d59e6a14b8ffd1ef49d2563e, type: 3}
   _titleText: {fileID: 1794096557271469919}
+  _killText: {fileID: 1794096557306208445}
+  _playTime: {fileID: 1794096558129588912}
   _scrollObj: {fileID: 1794096556485513845}
 --- !u!1 &1794096558468178717
 GameObject:

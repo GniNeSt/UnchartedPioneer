@@ -41,6 +41,7 @@ namespace DefineEnums
         MiniStatusBox,
         TimeBox,
         KillLogBox,
+        VirtualPadBox,
         CountingPanel,
         CountInfoBox,
         ResultWindow,
