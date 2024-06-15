@@ -22,6 +22,7 @@ namespace DefineUtility
     }
     public static class PoolUtils
     {
+        public const int _homeUIOffsetIndex = 1000;
         static int[] _ingamePrefabByFolder = { 2, 1, 1 };
 
         public static int GetCountIngamePrefab(IngameResourceFolderName name)

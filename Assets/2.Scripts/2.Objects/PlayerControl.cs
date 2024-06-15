@@ -65,7 +65,7 @@ public class PlayerControl : CharacterBase
         //float my = Input.GetAxisRaw("Vertical");
         float mx = _virtualInputPad._horizValue;
         float my = _virtualInputPad._vertValue;
-        Debug.LogFormat("{0},{1}", mx, my);
+        Debug.LogFormat("x : {0}, y : {1}", mx, my);
         {
             //float mx = 0;
             //float my = 0;

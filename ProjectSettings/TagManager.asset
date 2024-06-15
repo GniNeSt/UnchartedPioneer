@@ -11,6 +11,8 @@ TagManager:
   - DamageZoneMon
   - Monster
   - CameraPosition
+  - RootPos
+  - RootStage
   layers:
   - Default
   - TransparentFX

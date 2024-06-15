@@ -14,7 +14,7 @@ public class BulletControl : MonoBehaviour
         _rgbd2D.AddForce(-transform.right * force); //사격 rigidbody 물리 적용    ------1
         _finishDamage = finish;
 
-        _effectPrefab = IngameManager._Instance.GetPrefabFromName(IngamePrefabName.Explosion);
+        _effectPrefab = PoolManager._instance.GetPrefabFromName(IngamePrefabName.Explosion);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

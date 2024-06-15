@@ -14,7 +14,7 @@ public class LuncherControl : MonoBehaviour
     {
         _pc = GetComponent<PlayerControl>();
         //_prefabBullet = Resources.Load("Prefabs/Objects/BulletObj") as GameObject;
-        _prefabBullet = IngameManager._Instance.GetPrefabFromName(IngamePrefabName.BulletObj);
+        _prefabBullet = PoolManager._instance.GetPrefabFromName(IngamePrefabName.BulletObj);
 
     }
     private void Update()

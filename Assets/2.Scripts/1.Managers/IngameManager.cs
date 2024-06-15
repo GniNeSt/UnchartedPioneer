@@ -6,9 +6,9 @@ public class IngameManager : MonoBehaviour
 {
     static IngameManager _uniqueInstance;   // 인스턴스 정적 메모리 변수 (객체 참조)---1
 
-    Dictionary<string, GameObject> _prefabPool;
+    //Dictionary<string, GameObject> _prefabPool;
 
-    Dictionary<UIWndName, GameObject> _prefabUIWnd;
+    //Dictionary<UIWndName, GameObject> _prefabUIWnd;
 
     //기본 정보 변수
     const float _readyTime = 3, _endTime = 3f;
@@ -120,19 +120,19 @@ public class IngameManager : MonoBehaviour
                 break;
         }
     }
-    void InitUiPrefabs()
-    {
-        _prefabUIWnd = new Dictionary<UIWndName, GameObject>();
+    //void InitUiPrefabs(SceneType scene)
+    //{
+    //    _prefabUIWnd = new Dictionary<UIWndName, GameObject>();
 
-        int count = (int)UIWndName.max;
-        string path = "Prefabs/UIs/";
-        for (int n = 0; n < count; n++)
-        {
-            UIWndName name = (UIWndName)n;
-            GameObject prefab = Resources.Load(path + name.ToString()) as GameObject;
-            _prefabUIWnd.Add(name, prefab);
-        }
-    }
+    //    int count = (int)UIWndName.max1;
+    //    string path = "Prefabs/UIs/";
+    //    for (int n = 0; n < count; n++)
+    //    {
+    //        UIWndName name = (UIWndName)n;
+    //        GameObject prefab = Resources.Load(path + name.ToString()) as GameObject;
+    //        _prefabUIWnd.Add(name, prefab);
+    //    }
+    //}
     bool CheckClearCondition()
     {
         bool isClear = false;
@@ -193,8 +193,8 @@ public class IngameManager : MonoBehaviour
 
         _ltMonsterKind = new Dictionary<MonsterKindName, int>();
 
-        SaveUseIngamePrefabs();
-        InitUiPrefabs();
+        //SaveUseIngamePrefabs();
+        //InitUiPrefabs(SceneType.IngameScene);
 
 
         //참조
@@ -208,7 +208,7 @@ public class IngameManager : MonoBehaviour
         _camPos = go.transform;
         _etRangeControls = GameObject.FindObjectsOfType<EventTriggerRangeControl>();
         //UI
-        prefab = _prefabUIWnd[UIWndName.TitleMessageBox];
+        prefab = PoolManager._instance.GetUIPrefabFromName(UIWndName.TitleMessageBox);
         go = Instantiate(prefab, _uiMainFrameRoot);
 
         _msgTBox = go.GetComponent<TitleMessageBox>();
@@ -219,25 +219,25 @@ public class IngameManager : MonoBehaviour
 
 
         //Player MiniStatusBox//////////////////////////////////////////////
-        prefab = _prefabUIWnd[UIWndName.MiniStatusBox];
+        prefab = PoolManager._instance.GetUIPrefabFromName(UIWndName.MiniStatusBox);
         go = Instantiate(prefab, _uiMainFrameRoot);
         _miniStatusBox = go.GetComponent<MiniStatusBox>();
         //TimeBox///////////////////////////
-        prefab = _prefabUIWnd[UIWndName.TimeBox];
+        prefab = PoolManager._instance.GetUIPrefabFromName(UIWndName.TimeBox);
         go = Instantiate(prefab, _uiMainFrameRoot);
 
         _timeBox = go.GetComponent<TimeUI>();
         //킬로그 생성
-        prefab = _prefabUIWnd[UIWndName.KillLogBox];
+        prefab = PoolManager._instance.GetUIPrefabFromName(UIWndName.KillLogBox);
         go = Instantiate(prefab, _uiMainFrameRoot);
 
         _killLogBox = go.GetComponent<KillLogBox>();
 
-        prefab = _prefabUIWnd[UIWndName.CountingPanel];
+        prefab = PoolManager._instance.GetUIPrefabFromName(UIWndName.CountingPanel);
         _countingPanel = prefab.GetComponent<CountingPanel>();
 
 
-        go = Instantiate(_prefabUIWnd[UIWndName.VirtualPadBox],_uiMainFrameRoot);
+        go = Instantiate(PoolManager._instance.GetUIPrefabFromName(UIWndName.VirtualPadBox),_uiMainFrameRoot);
         _virtualInputPad = go.GetComponent<VirtualInputPad>();
         _virtualInputPad.gameObject.SetActive(false);
 
@@ -269,61 +269,61 @@ public class IngameManager : MonoBehaviour
         SettingEndConditions();
     }
 
-    void SaveUseIngamePrefabs()
-    {
-        _prefabPool = new Dictionary<string, GameObject>();
-        GameObject go = null;
-        int idNum = 0, folderCount = 0, count = 0;
-        string path = string.Empty;
-        folderCount = (int)IngameResourceFolderName.count;
-        for (int n = 0; n < folderCount; n++)
-        {
-            count = PoolUtils.GetCountIngamePrefab((IngameResourceFolderName)n);
-            for (int m = 0; m < count; m++)
-            {
-                path = "Prefabs/" + ((IngameResourceFolderName)n).ToString() + "/";
-                go = Resources.Load(path + ((IngamePrefabName)idNum).ToString()) as GameObject;
-                Debug.LogFormat("path : {0}, gameObjectName : {1}", path, go.name);
-                _prefabPool.Add(((IngamePrefabName)idNum).ToString(), go);
-                idNum++;
-            }
-            //
-            ////Effects
-            //count = (int)IngameResourceFolderName.Effects;
-            //for (int m = 0; m < count; m++)
-            //{
-            //    string path = "Prefabs/" + IngameResourceFolderName.Effects + "/";
-            //    go = Resources.Load(path + ((IngamePrefabName)idNum).ToString()) as GameObject;
-            //    _prefabPool.Add((IngamePrefabName)idNum, go);
-            //    idNum++;
-            //}
-            ////Objects
-            //count = (int)IngameResourceFolderName.Objects;
-            //for (int m = 0; m < count; m++)
-            //{
-            //    string path = "Prefabs/" + IngameResourceFolderName.Objects + "/";
-            //    go = Resources.Load(path + ((IngamePrefabName)idNum).ToString()) as GameObject;
-            //    _prefabPool.Add((IngamePrefabName)idNum, go);
-            //    idNum++;
+    //void SaveUseIngamePrefabs()
+    //{
+    //    _prefabPool = new Dictionary<string, GameObject>();
+    //    GameObject go = null;
+    //    int idNum = 0, folderCount = 0, count = 0;
+    //    string path = string.Empty;
+    //    folderCount = (int)IngameResourceFolderName.count;
+    //    for (int n = 0; n < folderCount; n++)
+    //    {
+    //        count = PoolUtils.GetCountIngamePrefab((IngameResourceFolderName)n);
+    //        for (int m = 0; m < count; m++)
+    //        {
+    //            path = "Prefabs/" + ((IngameResourceFolderName)n).ToString() + "/";
+    //            go = Resources.Load(path + ((IngamePrefabName)idNum).ToString()) as GameObject;
+    //            Debug.LogFormat("path : {0}, gameObjectName : {1}", path, go.name);
+    //            _prefabPool.Add(((IngamePrefabName)idNum).ToString(), go);
+    //            idNum++;
+    //        }
+    //        //
+    //        ////Effects
+    //        //count = (int)IngameResourceFolderName.Effects;
+    //        //for (int m = 0; m < count; m++)
+    //        //{
+    //        //    string path = "Prefabs/" + IngameResourceFolderName.Effects + "/";
+    //        //    go = Resources.Load(path + ((IngamePrefabName)idNum).ToString()) as GameObject;
+    //        //    _prefabPool.Add((IngamePrefabName)idNum, go);
+    //        //    idNum++;
+    //        //}
+    //        ////Objects
+    //        //count = (int)IngameResourceFolderName.Objects;
+    //        //for (int m = 0; m < count; m++)
+    //        //{
+    //        //    string path = "Prefabs/" + IngameResourceFolderName.Objects + "/";
+    //        //    go = Resources.Load(path + ((IngamePrefabName)idNum).ToString()) as GameObject;
+    //        //    _prefabPool.Add((IngamePrefabName)idNum, go);
+    //        //    idNum++;
 
-            //}
-        }
-    }
+    //        //}
+    //    }
+    //}
 
-    public GameObject GetPrefabFromName(IngamePrefabName name)
-    {
-        string str = name.ToString();
-        if (!_prefabPool.ContainsKey(str))
-            return null;
-        return _prefabPool[str];
-    }
-    public GameObject GetPrefabFromName(string name)
-    {
-        string str = name;
-        if (!_prefabPool.ContainsKey(str))
-            return null;
-        return _prefabPool[str];
-    }
+    //public GameObject GetPrefabFromName(IngamePrefabName name)
+    //{
+    //    string str = name.ToString();
+    //    if (!_prefabPool.ContainsKey(str))
+    //        return null;
+    //    return _prefabPool[str];
+    //}
+    //public GameObject GetPrefabFromName(string name)
+    //{
+    //    string str = name;
+    //    if (!_prefabPool.ContainsKey(str))
+    //        return null;
+    //    return _prefabPool[str];
+    //}
     public void SettingEndConditions()
     {
         _endConditions = new List<ClearConditionInfo>();
@@ -333,12 +333,11 @@ public class IngameManager : MonoBehaviour
     public void StateStart()
     {
         _crrentState = IngameState.Start;
-        _virtualInputPad.InitSet();
         GameObject prefab = null;
         GameObject go = null;
         //플레이어 생성
         //prefab = Resources.Load("Prefabs/Characters/PlayerObj") as GameObject;
-        prefab = GetPrefabFromName(IngamePrefabName.PlayerObj);
+        prefab = PoolManager._instance.GetPrefabFromName(IngamePrefabName.PlayerObj);
         go = Instantiate(prefab, _posSpawnPlayer, Quaternion.identity);
         _myPlayer = go.GetComponent<PlayerControl>();
         _myPlayer.InitSet("개척자", 4, 3, 100, _miniStatusBox, _virtualInputPad);
@@ -377,8 +376,7 @@ public class IngameManager : MonoBehaviour
         _msgTBox.CloseBox();
 
 
-        GameObject go = _prefabUIWnd[UIWndName.VirtualPadBox];
-        _virtualInputPad = go.GetComponent<VirtualInputPad>();
+        _virtualInputPad.InitSet();
     }
     public void StateEnd(bool dead)
     {
@@ -410,9 +408,9 @@ public class IngameManager : MonoBehaviour
     {
         _crrentState = IngameState.Result;
 
-        GameObject go = Instantiate(_prefabUIWnd[UIWndName.ResultWindow]);
+        GameObject go = Instantiate(PoolManager._instance.GetUIPrefabFromName(UIWndName.ResultWindow));
         ResultWnd wnd = go.GetComponent<ResultWnd>();
-        go = _prefabUIWnd[UIWndName.CountInfoBox];
+        go = PoolManager._instance.GetUIPrefabFromName(UIWndName.CountInfoBox);
 
         wnd.OpenWnd(_isClear, go, _ltMonsterKind, _playTime);
     }
@@ -441,7 +439,7 @@ public class IngameManager : MonoBehaviour
     {
         if (_msgInfoBox == null)
         {
-            GameObject prefab = _prefabUIWnd[UIWndName.InfoMessageBox];
+            GameObject prefab = PoolManager._instance.GetUIPrefabFromName(UIWndName.InfoMessageBox);
             GameObject go = Instantiate(prefab, _uiMainFrameRoot);
             _msgInfoBox = go.GetComponent<InfoMessageBox>();
         }

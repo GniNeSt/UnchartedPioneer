@@ -5,7 +5,6 @@ using DefineEnums;
 using UnityEngine.UI;
 public class ResultWnd : MonoBehaviour
 {
-    [SerializeField] Sprite[] _iconMons;
     [SerializeField] Text _titleText, _killText,_playTime;
     [SerializeField] Transform _scrollObj;
     
@@ -29,7 +28,7 @@ public class ResultWnd : MonoBehaviour
 
             CountInfoBox cb = go.GetComponent<CountInfoBox>();
 
-            cb.InitSet(_iconMons[(int)kind], killcounts[kind]);
+            cb.InitSet(PoolManager._instance.GetIconFromName(kind), killcounts[kind]);
 
             killResult += killcounts[kind];
         }
@@ -44,5 +43,27 @@ public class ResultWnd : MonoBehaviour
     public void CloseWnd()
     {
         gameObject.SetActive(false);
+    }
+
+    public void ButtonDown(RectTransform text)
+    {
+        text.anchoredPosition += Vector2.down * 20;
+    }
+    public void ButtonUp(RectTransform text)
+    {
+        text.anchoredPosition += Vector2.up * 20;
+
+    }
+    public void ClickHomeButton()
+    {
+
+    }
+    public void ClickRegameButton()
+    {
+
+    }
+    public void ClickNextButton()
+    {
+
     }
 }

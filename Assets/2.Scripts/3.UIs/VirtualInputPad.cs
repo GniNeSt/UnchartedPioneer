@@ -75,12 +75,16 @@ public class VirtualInputPad : MonoBehaviour, IDragHandler, IPointerUpHandler, I
             float dot = Vector3.Dot(Vector3.up, _inputVector);
             float anlge = Mathf.Acos(dot);
             float deg = anlge * Mathf.Rad2Deg;
-            if(deg < 15) _inputVector.x = 0;
+            if(deg < 15 || deg > 165) _inputVector.x = 0;
+            Debug.Log(deg);
             dot = Vector3.Dot(Vector3.right, _inputVector);
             anlge = Mathf.Acos(dot);
             deg = anlge * Mathf.Rad2Deg;
-            if (deg < 15) _inputVector.y = 0;
+            if (deg < 15 || deg > 165) _inputVector.y = 0;
 
+
+            //float anlge = Mathf.Acos(Vector3.Dot(Vector3.down, drawVector));
+            //angle *= Mathf.Rad2Deg;
             
         }
     }

@@ -49,7 +49,7 @@ public class SpawnFactory : MonoBehaviour
         totalPrice = 0;
         for (int i = 0; i < (int)MonsterKindName.Count; i++)    //사용하는 몬스터 종류의 수를 받아오기
         {
-            GameObject go = IngameManager._Instance.GetPrefabFromName(((MonsterKindName)i).ToString());
+            GameObject go = PoolManager._instance.GetPrefabFromName(((MonsterKindName)i).ToString());
             MonsterRank mr = go.GetComponent<MonsterControl>()._getRank;
             totalPrice += RarePrice.GetPriceOfMonPrefab(mr);
         }
@@ -59,7 +59,7 @@ public class SpawnFactory : MonoBehaviour
     {
         GameObject go = GameObject.FindGameObjectWithTag("Player");
         _pc = go.GetComponent<PlayerControl>();
-        _prefabSpawnObject = IngameManager._Instance.GetPrefabFromName(_spawnMon.ToString());
+        _prefabSpawnObject = PoolManager._instance.GetPrefabFromName(_spawnMon.ToString());
         _generateObjs = new List<GameObject>();
         _isStart = true;
         _target = target;

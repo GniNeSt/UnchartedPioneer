@@ -6,6 +6,11 @@ namespace DefineEnums
 {
 
     #region[Manager]
+    public enum SceneType
+    {
+        HomeScene,
+        IngameScene
+    }
     public enum IngameState
     {
         Ready,
@@ -46,7 +51,11 @@ namespace DefineEnums
         CountInfoBox,
         ResultWindow,
 
-        max
+        max1,
+
+        StageButton     =1000,
+
+        max2
     }
 
     public enum ClearType

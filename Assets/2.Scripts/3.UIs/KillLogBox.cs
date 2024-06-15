@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 public class KillLogBox : MonoBehaviour
 {
-    [SerializeField] Sprite[] IconMons;
     RectTransform _myTransform;
     RectTransform _buttonTrans;
     List<CountingPanel> _monPanel;
@@ -26,7 +25,7 @@ public class KillLogBox : MonoBehaviour
         {
             CountingPanel newPanel = Instantiate(cp, _myTransform);
             _monPanel.Add(newPanel);
-            newPanel.GetComponent<CountingPanel>().InitSet(IconMons[(int)monKind]);
+            newPanel.GetComponent<CountingPanel>().InitSet(PoolManager._instance.GetIconFromName(monKind));
             RectTransform panelTransform = newPanel.GetComponent<RectTransform>();
             panelTransform.localPosition = _myTransform.anchoredPosition3D - new Vector3(0, panelTransform.sizeDelta.y * count++, 0);
         }
