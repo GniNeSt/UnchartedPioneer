@@ -20,6 +20,10 @@ public class PoolManager : MonoBehaviour
         _uniqueInstance = this;
         DontDestroyOnLoad(gameObject);
 
+    }
+    private void Start()
+    {
+
         //임시
         InitLoadData(SceneType.HomeScene);
     }
@@ -30,7 +34,7 @@ public class PoolManager : MonoBehaviour
             case SceneType.HomeScene:
                 LoadInGameUiPrefabs();
                 LoadHomeUIPrefabs();
-                LoadIngaeCharPrefabs();
+                LoadIngameCharPrefabs();
                 HomeManager._instance.InitsetData();
                 break;
             case SceneType.IngameScene:
@@ -59,7 +63,7 @@ public class PoolManager : MonoBehaviour
     }
     #endregion[Home 용]
     #region[Ingame용]
-    void LoadIngaeCharPrefabs()
+    void LoadIngameCharPrefabs()
     {
         _prefabPool = new Dictionary<string, GameObject>();
         GameObject go = null;

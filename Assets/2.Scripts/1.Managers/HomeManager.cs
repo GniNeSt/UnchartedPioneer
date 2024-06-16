@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DefineEnums;
+using UnityEngine.UI;
 public class HomeManager : MonoBehaviour
 {
     static HomeManager _uniqueInstance;
@@ -27,16 +28,22 @@ public class HomeManager : MonoBehaviour
     }
     public void InitsetData()
     {
+        Debug.Log("InitsetData");
         GameObject go = GameObject.FindGameObjectWithTag("RootPos");
         _rootPos = go.transform;
         go = GameObject.FindGameObjectWithTag("RootStage");
         _rootStage = go.transform;
         GameObject prefab = PoolManager._instance.GetUIPrefabFromName(UIWndName.StageButton);
 
-        foreach(RectTransform childPos in _rootPos.GetComponentsInChildren<RectTransform>())    //child 바꾸기 , 현재 스테이지색 변경
+
+        for(int n = 0; n < _rootPos.childCount; n++)
         {
-            GameObject stageOb = Instantiate(prefab, childPos);
-            stageOb.transform.parent = _rootStage;            
+            GameObject stageOb = Instantiate(prefab, _rootPos.GetChild(n).GetComponent<RectTransform>());
+            Image img = stageOb.transform.GetChild(0).GetComponent<Image>();
+            if (_clearStage == n) img.color = Color.cyan;
+            else if (_selectStage == n) img.color = Color.red;
+            stageOb.transform.parent = _rootStage;
         }
+
     }
 }
