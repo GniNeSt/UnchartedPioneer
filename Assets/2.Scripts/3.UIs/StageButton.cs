@@ -8,8 +8,10 @@ public class StageButton : MonoBehaviour
     Image _lock;
     Text _txtTitle;
 
-    int _stageID;
+    StagePopWnd _stagePopWnd;
 
+    int _stageID;
+    bool _isSelected;
     public void InitSetData(int id, int clearStage, int nowStage)
     {
         _buttonBG = transform.GetChild(0).GetComponent<Image>();
@@ -21,7 +23,30 @@ public class StageButton : MonoBehaviour
             _lock.gameObject.SetActive(true);
         else
             _lock.gameObject.SetActive(false);
-        if (_stageID == nowStage)
+        EnableSelected(_stageID == nowStage);
+
+        _txtTitle.text = "Stage " + _stageID;
+    }
+    public void EnableSelected(bool isEnable)
+    {
+        if (isEnable)
             _buttonBG.color = new Color(255, 0, 230);
+        else
+            _buttonBG.color = Color.white;
+
+        _isSelected = isEnable;
+    }
+    public void ClickOpenButton()
+    {
+        if (_lock.gameObject.activeSelf)
+        {
+            HomeManager._instance.CheckSelectStage(_stageID);
+
+            //popup
+            if(_stagePopWnd == null)
+                _stagePopWnd = HomeManager._instance._stgPopWnd;
+            _stagePopWnd.InitSet();
+            _stagePopWnd.OpenPopupWnd(gameObject.GetComponent<RectTransform>().anchoredPosition);
+        }
     }
 }

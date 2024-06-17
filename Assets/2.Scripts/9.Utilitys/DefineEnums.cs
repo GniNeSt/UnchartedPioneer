@@ -54,10 +54,22 @@ namespace DefineEnums
         max1,
 
         StageButton     =1000,
+        StagePopupWindow,
+
 
         max2
     }
+    public enum StageMapName
+    {
+        Stage1,
+        Stage2,
+        Stage3,
+        Stage4,
+        Stage5,
 
+
+        count 
+    }
     public enum ClearType
     {
         KillCount,

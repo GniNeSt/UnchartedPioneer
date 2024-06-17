@@ -11,6 +11,7 @@ public class PoolManager : MonoBehaviour
 
     Dictionary<UIWndName, GameObject> _prefabUIWnd;
     Dictionary<MonsterKindName, Sprite> _imgIcons;
+    Dictionary<StageMapName, Sprite> _imgMaps;
     public static PoolManager _instance
     {
         get { return _uniqueInstance; }
@@ -32,10 +33,13 @@ public class PoolManager : MonoBehaviour
         switch (scene)
         {
             case SceneType.HomeScene:
+                LoadInGameMapImages();
+                LoadInGamIconImages();
                 LoadInGameUiPrefabs();
                 LoadHomeUIPrefabs();
                 LoadIngameCharPrefabs();
                 HomeManager._instance.InitsetData();
+
                 break;
             case SceneType.IngameScene:
                 break;
@@ -104,6 +108,21 @@ public class PoolManager : MonoBehaviour
         }
     }
     #endregion[Ingame¿ë]
+    void LoadInGameMapImages()
+    {
+        if (_imgMaps != null)
+            _imgMaps.Clear();
+        else
+            _imgMaps = new Dictionary<StageMapName, Sprite>();
+        int count = (int)StageMapName.count;
+        string path = "Images/Maps/";
+        for (int n = 0; n < count; n++)
+        {
+            StageMapName kind = (StageMapName)n;
+            Sprite icon = Resources.Load(path + kind.ToString()) as Sprite;
+            _imgMaps.Add(kind, icon);
+        }
+    }
     void LoadInGameUiPrefabs()
     {
 
@@ -130,7 +149,7 @@ public class PoolManager : MonoBehaviour
         else
             _imgIcons = new Dictionary<MonsterKindName, Sprite>();
         int count = (int)MonsterKindName.Count;
-        string path = "Prefabs/Images/Icon/";
+        string path = "Images/Icon/";
         for(int n = 0; n < count; n++)
         {
             MonsterKindName kind = (MonsterKindName)n;
@@ -169,5 +188,14 @@ public class PoolManager : MonoBehaviour
             return null;
         return _imgIcons[name];
     }
+    public Sprite GetMapFromName(StageMapName name)
+    {
+        if (!_imgMaps.ContainsKey(name))
+        {
+            Debug.Log("null ¶¹´Ù...");
+            return null;
 
+        }
+        return _imgMaps[name];
+    }
 }
