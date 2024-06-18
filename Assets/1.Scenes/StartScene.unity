@@ -222,6 +222,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _loadingImg: {fileID: 658428659}
   _loadingTxt: {fileID: 1699583382}
+  _tooTip: {fileID: 1785603431}
+  _loadingSlider: {fileID: 1025876808}
 --- !u!1 &150696654
 GameObject:
   m_ObjectHideFlags: 0

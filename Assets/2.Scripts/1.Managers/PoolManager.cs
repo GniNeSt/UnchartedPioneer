@@ -14,6 +14,10 @@ public class PoolManager : MonoBehaviour
     List<string> _tipDatas;
 
     bool _isFirst = true;
+    public List<string> TipDatas
+    {
+        get { return _tipDatas; }
+    }
     public int _tipMaxCount
     {
         get { return _tipDatas.Count; }

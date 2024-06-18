@@ -5,11 +5,13 @@ using UnityEngine.UI;
 public class LoadingWnd : MonoBehaviour
 {
     [SerializeField] Image _loadingImg;
-    [SerializeField] Text _loadingTxt;
-    float _rollingTime, dotTime = 0.3f;
+    [SerializeField] Text _loadingTxt, _tooTip;
+    [SerializeField] Slider _loadingSlider;
+    float _rollingTime, dotTime = 0.3f, loadingTime;
     int _dotCount = 6;
     private void Update()
     {
+        loadingTime+=Time.deltaTime;
         _rollingTime += Time.deltaTime;
         dotTime += Time.deltaTime;
         if (_rollingTime > 0.1f)
@@ -22,6 +24,18 @@ public class LoadingWnd : MonoBehaviour
             dotTime = 0f;
             _dotCount = dotText(_loadingTxt, _dotCount);
         }
+        if(loadingTime > 10.0f)
+        {
+            loadingTime = 0f;
+            List<string> list = PoolManager._instance.TipDatas;
+            int num = Random.Range(0, list.Count);
+            _tooTip.text = list[num];
+        }
+        
+    }
+    private void LateUpdate()
+    {
+        _loadingSlider.value = loadingTime/10f;
     }
     public void RollingImg(Image Img)
     {
