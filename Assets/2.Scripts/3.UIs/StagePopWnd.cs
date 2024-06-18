@@ -29,4 +29,8 @@ public class StagePopWnd : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+    public void onClickStart()
+    {
+        SceneControlManager._instance.LoadIngameScene();//int
+    }
 }

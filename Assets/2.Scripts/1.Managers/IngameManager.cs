@@ -62,13 +62,13 @@ public class IngameManager : MonoBehaviour
         _uniqueInstance = this;     //객체 잠조 Singleton                           ---1
         _guiColor = Color.white;
     }
-    private void start()
-    {
-        //임시
-        PoolManager._instance.InitLoadData(SceneType.HomeScene);
-        StateReady();
-        //===
-    }
+    //private void start()
+    //{
+    //    //임시
+    //    PoolManager._instance.InitLoadData(SceneType.HomeScene);
+    //    StateReady();
+    //    //===
+    //}
 
     private void LateUpdate()
     {

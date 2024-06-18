@@ -8,8 +8,17 @@ namespace DefineEnums
     #region[Manager]
     public enum SceneType
     {
+        none,
         HomeScene,
         IngameScene
+    }
+    public enum LoadingState
+    {
+        none,
+        Start,
+        ing,
+        End
+
     }
     public enum IngameState
     {
@@ -55,7 +64,8 @@ namespace DefineEnums
 
         StageButton     =1000,
         StagePopupWindow,
-
+        OptionWindow,
+        QuitMessageWindow,
 
         max2
     }

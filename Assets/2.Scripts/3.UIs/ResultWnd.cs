@@ -56,14 +56,14 @@ public class ResultWnd : MonoBehaviour
     }
     public void ClickHomeButton()
     {
-
+        SceneControlManager._instance.LoadHomeScene();
     }
     public void ClickRegameButton()
     {
-
+        SceneControlManager._instance.LoadIngameScene();//int
     }
     public void ClickNextButton()
     {
-
+        SceneControlManager._instance.LoadIngameScene();//int
     }
 }
