@@ -29,7 +29,6 @@ public class HomeManager : MonoBehaviour
     {
         get { return _selectStage; }
     }
-
     //ÀÓ½Ã
     int _clearStage = 1;
     int _selectStage = 2;//id
@@ -41,7 +40,6 @@ public class HomeManager : MonoBehaviour
     private void Awake()
     {
         _uniqueInstance = this;
-        
     }
     public void InitsetData()
     {
@@ -71,8 +69,6 @@ public class HomeManager : MonoBehaviour
             //
             stageOb.GetComponent<StageButton>().InitSetData(n+1, _clearStage, _selectStage);
         }
-
-
         InitSampleStageInfo();
         //ÆË¾÷wind
         Debug.Log("wind »ý¼º");
@@ -81,7 +77,6 @@ public class HomeManager : MonoBehaviour
         _stagePopWnd = go.GetComponent<StagePopWnd>();
         _stagePopWnd.ClosePopupWnd();
     }
-
     public void CheckSelectStage(int id)
     {
         //ÀüºÎ²ô±â
