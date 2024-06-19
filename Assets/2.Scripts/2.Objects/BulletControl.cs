@@ -20,6 +20,7 @@ public class BulletControl : MonoBehaviour
     {
         if (collision.CompareTag("Wall"))   //충돌한 collision의 게임오브젝트 태그가 "Wall" 이라면
         {
+            SoundManager._instance.PlaySFX(SFXClipName.WallHit);
             //GameObject effect = Resources.Load("Prefabs/Effects/Explosion") as GameObject;  //파일 접근 GameObject 참조  ---2
             
             GameObject go = Instantiate(_effectPrefab, transform.position, Quaternion.identity);   //참조한 GObj 생성 및 참조   ---2, 3
@@ -30,6 +31,7 @@ public class BulletControl : MonoBehaviour
         }
         else if (collision.CompareTag("Monster"))
         {
+            SoundManager._instance.PlaySFX(SFXClipName.MonsterHit);
             MonsterControl mc = collision.GetComponent<MonsterControl>();
             mc.OnHitting(_finishDamage);
             //이펙트

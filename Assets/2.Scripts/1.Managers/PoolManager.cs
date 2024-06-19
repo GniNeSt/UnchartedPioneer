@@ -34,11 +34,6 @@ public class PoolManager : MonoBehaviour
         //임시
         InitLoadData(SceneType.HomeScene);
     }
-    private void Start()
-    {
-
-
-    }
     public void InitLoadData(SceneType scene)
     {
         switch (scene)
@@ -46,8 +41,8 @@ public class PoolManager : MonoBehaviour
             case SceneType.HomeScene:
                 Debug.Log("HomeScene 실행!");
                 LoadInGameMapImages();
-                //LoadInGamIconImages();
                 LoadInGameUiPrefabs();
+                //LoadInGamIconImages();
                 //LoadHomeUIPrefabs();
                 //LoadIngameCharPrefabs();
                 //HomeManager._instance.InitsetData();
@@ -155,7 +150,7 @@ public class PoolManager : MonoBehaviour
         {
             StageMapName kind = (StageMapName)n;
             Debug.Log("맵 경로 추적 중..." + kind.ToString());
-            Sprite icon = Resources.Load(path + kind.ToString()) as Sprite;
+            Sprite icon = Resources.Load<Sprite>(path + kind.ToString());
             //Debug.Log(icon.name);
             _imgMaps.Add(kind, icon);
         }

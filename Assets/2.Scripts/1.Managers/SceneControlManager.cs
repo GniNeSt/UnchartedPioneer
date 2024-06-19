@@ -7,10 +7,13 @@ public class SceneControlManager : MonoBehaviour
     static SceneControlManager _uniqueInstance;
     SceneType _nowSceneType;
     LoadingState _nowState;
-    //임시
-    AsyncOperation _nowOper;
-    bool _doOnce;
-    //===
+
+    LoadingWnd _wndLoading;
+
+    ////임시
+    //AsyncOperation _nowOper;
+    //bool _doOnce;
+    ////===
     public static SceneControlManager _instance
     {
         get { return _uniqueInstance; }
@@ -56,7 +59,7 @@ public class SceneControlManager : MonoBehaviour
     {
         _nowSceneType = SceneType.HomeScene;
         _nowState = LoadingState.Start;
-        _nowOper = SceneManager.LoadSceneAsync("HomeScene");
+        //----_nowOper = SceneManager.LoadSceneAsync("HomeScene");
     }
     public void LoadIngameScene(int stageNum = 1)
     {
@@ -68,13 +71,15 @@ public class SceneControlManager : MonoBehaviour
 
     public IEnumerator LoadingScene(string sceneName, int stageNum = 0)
     {
+        OpenLoadingWnd();
         AsyncOperation aOper = SceneManager.LoadSceneAsync(sceneName);
         _nowState = LoadingState.ing;
         while (!aOper.isDone)
         {
+            _wndLoading.SetLoaddingRate(aOper.progress);
             yield return null;
         }
-
+        _wndLoading.SetLoaddingRate(aOper.progress);
         yield return new WaitForSeconds(1.5f);
         _nowState = LoadingState.End;
 
@@ -82,11 +87,31 @@ public class SceneControlManager : MonoBehaviour
         {
 
             case SceneType.HomeScene:
+                SoundManager._instance.PlayBGM(BGMClipName.HomeScene);
                 HomeManager._instance.InitsetData();
                 break;
             case SceneType.IngameScene:
+                SoundManager._instance.PlayBGM(BGMClipName.Ingame1);
                 IngameManager._Instance.StateReady();
                 break;
         }
+
+        CloseLoadingWnd();
+    }
+
+    void OpenLoadingWnd()
+    {
+        if(_wndLoading == null)
+        {
+            GameObject prefab = PoolManager._instance.GetUIPrefabFromName(UIWndName.LoadingWindow);
+            GameObject go = Instantiate(prefab, transform);
+            _wndLoading =  go.GetComponent<LoadingWnd>();
+        }
+        _wndLoading.OpenWindow();
+    }
+    void CloseLoadingWnd()
+    {
+        if (_wndLoading != null)
+            _wndLoading.CloseWindow();
     }
 }

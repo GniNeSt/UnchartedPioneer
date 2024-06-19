@@ -43,6 +43,8 @@ public class LuncherControl : MonoBehaviour
     }
     public void Fire(Transform pos)
     {
+        SoundManager._instance.PlaySFX(SFXClipName.Fire);
+
         _MuzzleFlash.transform.position = pos.position;
         _MuzzleFlash.transform.rotation = pos.rotation;
         _MuzzleFlash.SetActive(true);

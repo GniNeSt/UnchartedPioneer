@@ -66,6 +66,7 @@ namespace DefineEnums
         StagePopupWindow,
         OptionWindow,
         QuitMessageWindow,
+        LoadingWindow,
 
         max2
     }
@@ -86,6 +87,24 @@ namespace DefineEnums
         Survive,
 
         end
+    }
+    public enum BGMClipName
+    {
+        HomeScene,
+        Ingame1,
+        Ingame2,
+
+        max
+    }
+    public enum SFXClipName
+    {
+        BigButtonClick,
+        SmallButtonClick,
+        Fire,
+        WallHit,
+        MonsterHit,
+
+        max
     }
     #endregion[Manager]
 

@@ -7,7 +7,7 @@ public class LoadingWnd : MonoBehaviour
     [SerializeField] Image _loadingImg;
     [SerializeField] Text _loadingTxt, _tooTip;
     [SerializeField] Slider _loadingSlider;
-    float _rollingTime, dotTime = 0.3f, loadingTime;
+    float _rollingTime, dotTime = 0.3f, loadingTime=10.0f;
     int _dotCount = 6;
     private void Update()
     {
@@ -54,5 +54,20 @@ public class LoadingWnd : MonoBehaviour
             text.text = "Loading";
         }
         return count;
+    }
+
+    public void OpenWindow()
+    {
+        gameObject.SetActive(true);
+        Canvas canvas = GetComponent<Canvas>();
+        canvas.worldCamera = Camera.main;
+    }
+    public void CloseWindow()
+    {
+        gameObject.SetActive(false);
+    }
+    public void SetLoaddingRate(float value)
+    {
+        _loadingSlider.value = value;
     }
 }
