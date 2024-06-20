@@ -1,18 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class OptionPopWnd : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] Slider _bgmSlider, _sfxSlider;
+    public void OpenWindow()
     {
-        
+        Debug.Log(gameObject.activeSelf);
+        gameObject.SetActive(true);
     }
-
-    // Update is called once per frame
-    void Update()
+    public void OptionWndClose()
     {
-        
+        Debug.Log("setActiveFalse");
+        gameObject.SetActive(false);
+    }
+    public void ChangeBgmVolume()
+    {
+        SoundManager._instance.SetBgmVolume(_bgmSlider.value);
+    }
+    public void ChangeSFXVolume()
+    {
+        SoundManager._instance.SetSFXVolume(_sfxSlider.value);
     }
 }

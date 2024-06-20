@@ -467,10 +467,22 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5733353522236221491}
+        m_TargetAssemblyTypeName: OptionPopWnd, Assembly-CSharp
+        m_MethodName: ChangeBgmVolume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2221510816508059938
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,6 +982,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b39ce6a779053b14caafbac3d7123f6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bgmSlider: {fileID: 2221510816385837209}
+  _sfxSlider: {fileID: 8947134945321202192}
 --- !u!1 &2221510817112935032
 GameObject:
   m_ObjectHideFlags: 0
@@ -1552,10 +1566,22 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5733353522236221491}
+        m_TargetAssemblyTypeName: OptionPopWnd, Assembly-CSharp
+        m_MethodName: ChangeSFXVolume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8107160581272553114
 GameObject:
   m_ObjectHideFlags: 0
@@ -1676,7 +1702,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3918585455926611942}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5733353522236221491}
+        m_TargetAssemblyTypeName: OptionPopWnd, Assembly-CSharp
+        m_MethodName: OptionWndClose
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8976615355254341125
 GameObject:
   m_ObjectHideFlags: 0

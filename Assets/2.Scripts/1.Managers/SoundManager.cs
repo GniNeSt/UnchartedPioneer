@@ -79,4 +79,13 @@ public class SoundManager : MonoBehaviour
             _sfxPlayer.PlayOneShot(_sfxClipList[name]);
         }
     }
+    public void SetBgmVolume(float volume)
+    {
+        _bgmPlayer.volume = volume;
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        _sfxPlayer.volume = volume;
+    }
 }

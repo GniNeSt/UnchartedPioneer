@@ -72,7 +72,7 @@ namespace DefineEnums
     }
     public enum StageMapName
     {
-        Stage1,
+        Stage1  =1,
         Stage2,
         Stage3,
         Stage4,

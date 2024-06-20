@@ -16,6 +16,7 @@ public class HomeManager : MonoBehaviour
     Dictionary<int, StageInfo> _stageInfos;
 
     StagePopWnd _stagePopWnd;
+    [SerializeField]OptionPopWnd _optionPopWnd;
     public StagePopWnd _stgPopWnd
     {
         get { return _stagePopWnd; }
@@ -98,30 +99,44 @@ public class HomeManager : MonoBehaviour
         //stage1
         MonsterKindName[] name = new MonsterKindName[1];
         name[0] = MonsterKindName.SlimeObj;
-        StageInfo info = new StageInfo(1, "모험의 날~", StageMapName.Stage1, name);
+        StageInfo info = new StageInfo(0, "모험의 날~", StageMapName.Stage1, name);
         _stageInfos.Add(1, info);
         //stage2
         name = new MonsterKindName[1];
         name[0] = MonsterKindName.WeakBatObj;
-        info = new StageInfo(2, "한걸음을..", StageMapName.Stage2, name);
+        info = new StageInfo(1, "한걸음을..", StageMapName.Stage2, name);
         _stageInfos.Add(2, info);
         //stage3
         name = new MonsterKindName[2];
         name[0] = MonsterKindName.WeakBatObj;
         name[1] = MonsterKindName.ModifyAlienObj;
-        info = new StageInfo(3, "갈길이 멀다..", StageMapName.Stage3, name);
+        info = new StageInfo(2, "갈길이 멀다..", StageMapName.Stage3, name);
         _stageInfos.Add(3, info);
         //stage4
         name = new MonsterKindName[3];
         name[0] = MonsterKindName.SlimeObj;
         name[1] = MonsterKindName.WeakBatObj;
         name[2] = MonsterKindName.ModifyAlienObj;
-        info = new StageInfo(4, "위기 발생!!", StageMapName.Stage4, name);
+        info = new StageInfo(3, "위기 발생!!", StageMapName.Stage4, name);
         _stageInfos.Add(4, info);
         //stage5
         name = new MonsterKindName[1];
         name[0] = MonsterKindName.WeakBatObj;
-        info = new StageInfo(5, "이어지는 모험", StageMapName.Stage5, name);
+        info = new StageInfo(4, "이어지는 모험", StageMapName.Stage5, name);
         _stageInfos.Add(5, info);
+    }
+    public void OptionBtnClick()
+    {
+        Debug.Log("BtnClick");
+        if(_optionPopWnd == null)
+        {
+            GameObject go = PoolManager._instance.GetUIPrefabFromName(UIWndName.OptionWindow);
+            Instantiate(go);
+            
+            _optionPopWnd = go.GetComponent<OptionPopWnd>();
+            _optionPopWnd.OptionWndClose();
+        }
+
+        _optionPopWnd.OpenWindow();
     }
 }

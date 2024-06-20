@@ -42,7 +42,6 @@ public class PoolManager : MonoBehaviour
                 Debug.Log("HomeScene ½ÇÇà!");
                 LoadInGameMapImages();
                 LoadHomeUIPrefabs();
-                //LoadInGamIconImages();
                 //LoadIngameCharPrefabs();
                 //HomeManager._instance.InitsetData();
 
@@ -50,6 +49,7 @@ public class PoolManager : MonoBehaviour
             case SceneType.IngameScene:
                 LoadIngameCharPrefabs();
                 LoadInGameUiPrefabs();
+                //LoadInGamIconImages();
                 break;
         }
         if (_isFirst)
@@ -140,10 +140,10 @@ public class PoolManager : MonoBehaviour
     #endregion[Ingame¿ë]
     void LoadInGameMapImages()
     {
-        //if (_imgMaps != null)
-        //    _imgMaps.Clear();
-        //else
-        _imgMaps = new Dictionary<StageMapName, Sprite>();
+        if (_imgMaps != null)
+            _imgMaps.Clear();
+        else
+            _imgMaps = new Dictionary<StageMapName, Sprite>();
         int count = (int)StageMapName.count;
         string path = "Images/Maps/";
         for (int n = 0; n < count; n++)
@@ -226,7 +226,6 @@ public class PoolManager : MonoBehaviour
         {
             Debug.Log("null ¶¹´Ù...");
             return null;
-
         }
         else
         {
