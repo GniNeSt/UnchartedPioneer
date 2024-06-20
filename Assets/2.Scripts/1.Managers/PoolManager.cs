@@ -41,9 +41,8 @@ public class PoolManager : MonoBehaviour
             case SceneType.HomeScene:
                 Debug.Log("HomeScene 실행!");
                 LoadInGameMapImages();
-                LoadInGameUiPrefabs();
+                LoadHomeUIPrefabs();
                 //LoadInGamIconImages();
-                //LoadHomeUIPrefabs();
                 //LoadIngameCharPrefabs();
                 //HomeManager._instance.InitsetData();
 
@@ -91,6 +90,7 @@ public class PoolManager : MonoBehaviour
         {
             UIWndName name = (UIWndName)(n + PoolUtils._homeUIOffsetIndex);
             GameObject prefab = Resources.Load(path + name.ToString()) as GameObject;
+            Debug.LogFormat("{0} 로드 성공!!", prefab.name);
             _prefabUIWnd.Add(name, prefab);
         }
 

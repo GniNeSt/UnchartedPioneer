@@ -59,6 +59,7 @@ public class SceneControlManager : MonoBehaviour
     {
         _nowSceneType = SceneType.HomeScene;
         _nowState = LoadingState.Start;
+        StartCoroutine(LoadingScene("HomeScene"));
         //----_nowOper = SceneManager.LoadSceneAsync("HomeScene");
     }
     public void LoadIngameScene(int stageNum = 1)
@@ -74,6 +75,7 @@ public class SceneControlManager : MonoBehaviour
         OpenLoadingWnd();
         AsyncOperation aOper = SceneManager.LoadSceneAsync(sceneName);
         _nowState = LoadingState.ing;
+
         while (!aOper.isDone)
         {
             _wndLoading.SetLoaddingRate(aOper.progress);
@@ -82,16 +84,17 @@ public class SceneControlManager : MonoBehaviour
         _wndLoading.SetLoaddingRate(aOper.progress);
         yield return new WaitForSeconds(1.5f);
         _nowState = LoadingState.End;
-
         switch (_nowSceneType)
         {
 
             case SceneType.HomeScene:
                 SoundManager._instance.PlayBGM(BGMClipName.HomeScene);
+                PoolManager._instance.InitLoadData(SceneType.HomeScene);
                 HomeManager._instance.InitsetData();
                 break;
             case SceneType.IngameScene:
                 SoundManager._instance.PlayBGM(BGMClipName.Ingame1);
+                PoolManager._instance.InitLoadData(SceneType.IngameScene);
                 IngameManager._Instance.StateReady();
                 break;
         }
@@ -101,11 +104,11 @@ public class SceneControlManager : MonoBehaviour
 
     void OpenLoadingWnd()
     {
-        if(_wndLoading == null)
+        if (_wndLoading == null)
         {
             GameObject prefab = PoolManager._instance.GetUIPrefabFromName(UIWndName.LoadingWindow);
             GameObject go = Instantiate(prefab, transform);
-            _wndLoading =  go.GetComponent<LoadingWnd>();
+            _wndLoading = go.GetComponent<LoadingWnd>();
         }
         _wndLoading.OpenWindow();
     }

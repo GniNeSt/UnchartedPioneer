@@ -24,7 +24,7 @@ public class SoundManager : MonoBehaviour
     }
     private void Start()
     {
-        PlayBGM(BGMClipName.HomeScene);
+        //PlayBGM(BGMClipName.HomeScene);
     }
     void LoadClips()
     {
